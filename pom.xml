@@ -1,0 +1,46 @@
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <artifactId>commons.core</artifactId>
+  <dependencies>
+    <dependency>
+      <artifactId>spring-webflux</artifactId>
+      <groupId>org.springframework</groupId>
+    </dependency>
+    <!--    test-->
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
+    <dependency>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>springmockk</artifactId>
+      <groupId>com.ninja-squad</groupId>
+      <scope>test</scope>
+      <version>${springmockk.version}</version>
+    </dependency>
+    <!--    kotlin coroutines-->
+    <dependency>
+      <artifactId>kotlinx-coroutines-reactor</artifactId>
+      <groupId>org.jetbrains.kotlinx</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>kotlinx-coroutines-test</artifactId>
+      <groupId>org.jetbrains.kotlinx</groupId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <groupId>com.angorasix</groupId>
+  <modelVersion>4.0.0</modelVersion>
+  <name>commons.core</name>
+  <packaging>jar</packaging>
+  <parent>
+    <artifactId>parent-pom-kotlin</artifactId>
+    <groupId>com.angorasix</groupId>
+    <relativePath/>
+    <version>0.1.1-SNAPSHOT</version> <!-- lookup parent from repository -->
+  </parent>
+  <version>0.1.1-SNAPSHOT</version>
+</project>
