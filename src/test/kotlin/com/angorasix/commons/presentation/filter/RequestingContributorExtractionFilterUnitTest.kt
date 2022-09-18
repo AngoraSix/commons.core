@@ -3,9 +3,9 @@ package com.angorasix.commons.presentation.filter
 import com.angorasix.commons.domain.RequestingContributor
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.AssertionsForClassTypes
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -19,8 +19,9 @@ import java.util.*
 /**
  * @author rozagerardo
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class RequestingContributorExtractionFilterUnitTest {
+class RequestingContributorExtractionFilterUnitTest {
 
     private lateinit var objectMapper: ObjectMapper
 
@@ -32,7 +33,7 @@ public class RequestingContributorExtractionFilterUnitTest {
 
     @Test
     @Throws(Exception::class)
-    fun `Given request - When headerFilterFunction invoked - Then response contains attribute`() =
+    fun `Given request with Admin Contributor Header - When extractRequestingContributor invoked - Then response contains attribute`() =
         runTest {
             val contributorHeaderJson =
                 """
@@ -50,14 +51,14 @@ public class RequestingContributorExtractionFilterUnitTest {
             }
 
             val outputResponse =
-                resolveRequestingContributor(
+                extractRequestingContributor(
                     mockedRequest,
                     next,
                     "Angorasix-API",
-                    objectMapper
+                    objectMapper,
                 )
 
-            AssertionsForClassTypes.assertThat(outputResponse.statusCode())
+            assertThat(outputResponse.statusCode())
                 .isEqualTo(HttpStatus.OK)
             assertThat(mockedRequest.attributes()).containsKey("Angorasix-API")
             val requestingContributor =
@@ -68,28 +69,82 @@ public class RequestingContributorExtractionFilterUnitTest {
 
     @Test
     @Throws(Exception::class)
-    fun `Given request with no header - When headerFilterFunction invoked and header is required - Then response is 401`() =
+    fun `Given request with Admin Contributor Attribute - When checkRequestingContributor invoked - Then response contains attribute and continues`() =
         runTest {
-            val mockedRequest: ServerRequest = MockServerRequest.builder().build()
+            val contributorAttribute = RequestingContributor("contrId1", true)
+            val mockedRequest: ServerRequest = MockServerRequest.builder()
+                .attribute("Angorasix-API", contributorAttribute).build()
             val next: suspend (request: ServerRequest) -> ServerResponse = {
                 ServerResponse.ok().buildAndAwait()
             }
 
             val outputResponse =
-                resolveRequestingContributor(
+                checkRequestingContributor(
                     mockedRequest,
                     next,
                     "Angorasix-API",
-                    objectMapper
                 )
 
-            AssertionsForClassTypes.assertThat(outputResponse.statusCode())
+            assertThat(outputResponse.statusCode())
+                .isEqualTo(HttpStatus.OK)
+            assertThat(mockedRequest.attributes()).containsKey("Angorasix-API")
+            val requestingContributor =
+                mockedRequest.attributes()["Angorasix-API"] as RequestingContributor
+            assertThat(requestingContributor).isEqualTo(contributorAttribute)
+        }
+
+    @Test
+    @Throws(Exception::class)
+    fun `Given request with Non Admin Contributor Attribute - When checkRequestingContributor allowing non-Admin invoked - Then response continues`() =
+        runTest {
+            val contributorAttribute = RequestingContributor("contrId1", false)
+            val mockedRequest: ServerRequest = MockServerRequest.builder()
+                .attribute("Angorasix-API", contributorAttribute).build()
+            val next: suspend (request: ServerRequest) -> ServerResponse = {
+                ServerResponse.ok().buildAndAwait()
+            }
+
+            val outputResponse =
+                checkRequestingContributor(
+                    mockedRequest,
+                    next,
+                    "Angorasix-API",
+                    true,
+                )
+
+            assertThat(outputResponse.statusCode())
+                .isEqualTo(HttpStatus.OK)
+            assertThat(mockedRequest.attributes()).containsKey("Angorasix-API")
+            val requestingContributor =
+                mockedRequest.attributes()["Angorasix-API"] as RequestingContributor
+            assertThat(requestingContributor).isEqualTo(contributorAttribute)
+        }
+
+    @Test
+    @Throws(Exception::class)
+    fun `Given request with Non Admin Contributor Attribute - When checkRequestingContributor invoked - Then response is Unauthorized`() =
+        runTest {
+            val contributorAttribute = RequestingContributor("contrId1", false)
+            val mockedRequest: ServerRequest = MockServerRequest.builder()
+                .attribute("Angorasix-API", contributorAttribute).build()
+            val next: suspend (request: ServerRequest) -> ServerResponse = {
+                ServerResponse.ok().buildAndAwait()
+            }
+
+            val outputResponse =
+                checkRequestingContributor(
+                    mockedRequest,
+                    next,
+                    "Angorasix-API",
+                )
+
+            assertThat(outputResponse.statusCode())
                 .isEqualTo(HttpStatus.UNAUTHORIZED)
         }
 
     @Test
     @Throws(Exception::class)
-    fun `Given request with no header - When headerFilterFunction invoked and header is not required - Then response is OK`() =
+    fun `Given request without Contributor Attribute - When checkRequestingContributor invoked - Then unauthorized response`() =
         runTest {
             val mockedRequest: ServerRequest = MockServerRequest.builder().build()
             val next: suspend (request: ServerRequest) -> ServerResponse = {
@@ -97,15 +152,34 @@ public class RequestingContributorExtractionFilterUnitTest {
             }
 
             val outputResponse =
-                resolveRequestingContributor(
+                checkRequestingContributor(
                     mockedRequest,
                     next,
                     "Angorasix-API",
-                    objectMapper,
-                    true
                 )
 
-            AssertionsForClassTypes.assertThat(outputResponse.statusCode())
-                .isEqualTo(HttpStatus.OK)
+            assertThat(outputResponse.statusCode())
+                .isEqualTo(HttpStatus.UNAUTHORIZED)
+        }
+
+    @Test
+    @Throws(Exception::class)
+    fun `Given request without Contributor Attribute - When checkRequestingContributor allowing non-Admin invoked - Then unauthorized response`() =
+        runTest {
+            val mockedRequest: ServerRequest = MockServerRequest.builder().build()
+            val next: suspend (request: ServerRequest) -> ServerResponse = {
+                ServerResponse.ok().buildAndAwait()
+            }
+
+            val outputResponse =
+                checkRequestingContributor(
+                    mockedRequest,
+                    next,
+                    "Angorasix-API",
+                    true,
+                )
+
+            assertThat(outputResponse.statusCode())
+                .isEqualTo(HttpStatus.UNAUTHORIZED)
         }
 }

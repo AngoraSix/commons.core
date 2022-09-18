@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.AssertionsForClassTypes
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -39,7 +38,7 @@ public class ResponseErrorHandlerUnitTest {
             val outputResponse =
                 resolveExceptionResponse(IllegalArgumentException("Mocked Error Message"))
 
-            AssertionsForClassTypes.assertThat(outputResponse.statusCode())
+            assertThat(outputResponse.statusCode())
                 .isEqualTo(HttpStatus.BAD_REQUEST)
 
             val errorResponseBody = fetchBodyAsErrorResponseBody(outputResponse)
@@ -58,10 +57,10 @@ public class ResponseErrorHandlerUnitTest {
             val outputResponse =
                 resolveExceptionResponse(
                     IllegalArgumentException("Mocked Error Message"),
-                    "Mock"
+                    "Mock",
                 )
 
-            AssertionsForClassTypes.assertThat(outputResponse.statusCode())
+            assertThat(outputResponse.statusCode())
                 .isEqualTo(HttpStatus.BAD_REQUEST)
 
             val errorResponseBody = fetchBodyAsErrorResponseBody(outputResponse)
@@ -80,7 +79,7 @@ public class ResponseErrorHandlerUnitTest {
             val outputResponse =
                 resolveExceptionResponse(Exception("Mocked Error Message"), "Mock")
 
-            AssertionsForClassTypes.assertThat(outputResponse.statusCode())
+            assertThat(outputResponse.statusCode())
                 .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
 
             val errorResponseBody = fetchBodyAsErrorResponseBody(outputResponse)
@@ -97,7 +96,7 @@ public class ResponseErrorHandlerUnitTest {
     fun `When resolveNotFound - Then response is 404 with standard fields`() = runTest {
         val outputResponse = resolveNotFound()
 
-        AssertionsForClassTypes.assertThat(outputResponse.statusCode())
+        assertThat(outputResponse.statusCode())
             .isEqualTo(HttpStatus.NOT_FOUND)
 
         val errorResponseBody = fetchBodyAsErrorResponseBody(outputResponse)
@@ -115,7 +114,7 @@ public class ResponseErrorHandlerUnitTest {
         runTest {
             val outputResponse = resolveNotFound("Mocked Error Message", "Mock")
 
-            AssertionsForClassTypes.assertThat(outputResponse.statusCode())
+            assertThat(outputResponse.statusCode())
                 .isEqualTo(HttpStatus.NOT_FOUND)
 
             val errorResponseBody = fetchBodyAsErrorResponseBody(outputResponse)
@@ -132,7 +131,7 @@ public class ResponseErrorHandlerUnitTest {
     fun `When resolveBadRequest - Then response is 400 with standard fields`() = runTest {
         val outputResponse = resolveBadRequest()
 
-        AssertionsForClassTypes.assertThat(outputResponse.statusCode())
+        assertThat(outputResponse.statusCode())
             .isEqualTo(HttpStatus.BAD_REQUEST)
 
         val errorResponseBody = fetchBodyAsErrorResponseBody(outputResponse)
@@ -150,7 +149,7 @@ public class ResponseErrorHandlerUnitTest {
         runTest {
             val outputResponse = resolveBadRequest("Mocked Error Message", "Mock")
 
-            AssertionsForClassTypes.assertThat(outputResponse.statusCode())
+            assertThat(outputResponse.statusCode())
                 .isEqualTo(HttpStatus.BAD_REQUEST)
 
             val errorResponseBody = fetchBodyAsErrorResponseBody(outputResponse)
@@ -159,6 +158,41 @@ public class ResponseErrorHandlerUnitTest {
             assertThat(errorResponseBody.errorCode).isEqualTo("MOCK_INVALID")
             assertThat(errorResponseBody.message).isEqualTo("Mocked Error Message")
             assertThat(errorResponseBody.status).isEqualTo(400)
+        }
+
+    @Test
+    @Throws(Exception::class)
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
+    fun `When resolveUnauthorized - Then response is 401 with standard fields`() = runTest {
+        val outputResponse = resolveUnauthorized()
+
+        assertThat(outputResponse.statusCode())
+            .isEqualTo(HttpStatus.UNAUTHORIZED)
+
+        val errorResponseBody = fetchBodyAsErrorResponseBody(outputResponse)
+
+        assertThat(errorResponseBody.error).isEqualTo("UnauthorizedDueToElement")
+        assertThat(errorResponseBody.errorCode).isEqualTo("ELEMENT_UNAUTHORIZED")
+        assertThat(errorResponseBody.message).isEqualTo("Element is invalid")
+        assertThat(errorResponseBody.status).isEqualTo(401)
+    }
+
+    @Test
+    @Throws(Exception::class)
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
+    fun `When resolveUnauthorized defining Element and message - Then response is 401 with customized fields`() =
+        runTest {
+            val outputResponse = resolveUnauthorized("Mocked Error Message", "Mock")
+
+            assertThat(outputResponse.statusCode())
+                .isEqualTo(HttpStatus.UNAUTHORIZED)
+
+            val errorResponseBody = fetchBodyAsErrorResponseBody(outputResponse)
+
+            assertThat(errorResponseBody.error).isEqualTo("UnauthorizedDueToElement")
+            assertThat(errorResponseBody.errorCode).isEqualTo("MOCK_UNAUTHORIZED")
+            assertThat(errorResponseBody.message).isEqualTo("Mocked Error Message")
+            assertThat(errorResponseBody.status).isEqualTo(401)
         }
 
     @Test
@@ -187,6 +221,20 @@ public class ResponseErrorHandlerUnitTest {
             assertThat(outputErrorResponseBody.errorCode).isEqualTo("MOCK_ELEMENT_INVALID")
             assertThat(outputErrorResponseBody.message).isEqualTo("Mock element is invalid")
             assertThat(outputErrorResponseBody.status).isEqualTo(400)
+        }
+
+    @Test
+    @Throws(Exception::class)
+    @kotlinx.coroutines.ExperimentalCoroutinesApi
+    fun `When creating ErrorResponseBody with no message and 401 status - Then ErrorResponseBody contains fields using element and status`() =
+        runTest {
+            val outputErrorResponseBody =
+                ErrorResponseBody(HttpStatus.UNAUTHORIZED, "mocked error", "Mock element", null)
+
+            assertThat(outputErrorResponseBody.error).isEqualTo("mocked error")
+            assertThat(outputErrorResponseBody.errorCode).isEqualTo("MOCK_ELEMENT_UNAUTHORIZED")
+            assertThat(outputErrorResponseBody.message).isEqualTo("Mock element is not authorized")
+            assertThat(outputErrorResponseBody.status).isEqualTo(401)
         }
 
     @Test

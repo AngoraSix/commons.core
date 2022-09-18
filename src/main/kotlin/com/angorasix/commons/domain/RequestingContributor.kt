@@ -8,5 +8,5 @@ package com.angorasix.commons.domain
  */
 data class RequestingContributor constructor(
     val id: String,
-    val isProjectAdmin: Boolean = false
+    val isProjectAdmin: Boolean = false,
 )
