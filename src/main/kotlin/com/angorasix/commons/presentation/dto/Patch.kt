@@ -19,7 +19,7 @@ data class PatchOperation(val op: String, val path: String, val value: JsonNode?
     fun toDomainObjectModification(
         contributor: RequestingContributor,
         supportedOperations: List<PatchOperationSpec>,
-        objectMapper: ObjectMapper
+        objectMapper: ObjectMapper,
     ): DomainObjectModification<out Any, out Any> {
         return supportedOperations.find { it.supportsPatchOperation(this) }
             ?.mapToObjectModification(contributor, this, objectMapper)
@@ -32,6 +32,6 @@ interface PatchOperationSpec {
     fun mapToObjectModification(
         contributor: RequestingContributor,
         operation: PatchOperation,
-        objectMapper: ObjectMapper
+        objectMapper: ObjectMapper,
     ): DomainObjectModification<out Any, out Any>
 }

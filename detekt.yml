@@ -588,7 +588,7 @@ style:
   MaxLineLength:
     active: true
     maxLineLength: 120
-    excludes: [ '**/test/**.kt']
+    excludes: [ '**/test/**.kt' ]
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: false

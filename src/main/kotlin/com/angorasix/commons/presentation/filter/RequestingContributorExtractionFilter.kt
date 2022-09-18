@@ -1,13 +1,11 @@
 package com.angorasix.commons.presentation.filter
 
 import com.angorasix.commons.domain.RequestingContributor
+import com.angorasix.commons.infrastructure.presentation.error.resolveUnauthorized
 import com.angorasix.commons.presentation.dto.ContributorHeaderDto
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.http.HttpStatus
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
-import org.springframework.web.reactive.function.server.ServerResponse.status
-import org.springframework.web.reactive.function.server.buildAndAwait
 import java.util.*
 
 /**
@@ -15,29 +13,40 @@ import java.util.*
  *
  * @author rozagerardo
  */
-suspend fun resolveRequestingContributor(
+suspend fun extractRequestingContributor(
     request: ServerRequest,
     next: suspend (ServerRequest) -> ServerResponse,
     contributorHeaderKey: String,
     objectMapper: ObjectMapper,
-    anonymousRequestAllowed: Boolean = false
 ): ServerResponse {
     request.headers().header(contributorHeaderKey).firstOrNull()?.let {
         val contributorHeaderString = String(Base64.getUrlDecoder().decode(it))
         val contributorHeader = objectMapper.readValue(
             contributorHeaderString,
-            ContributorHeaderDto::class.java
+            ContributorHeaderDto::class.java,
         )
         val requestingContributorToken = RequestingContributor(
             contributorHeader.contributorId,
-            contributorHeader.projectAdmin
+            contributorHeader.projectAdmin,
         )
         request.attributes()[contributorHeaderKey] = requestingContributorToken
-        return next(request)
     }
-    return if (anonymousRequestAllowed) {
+    return next(request)
+}
+
+suspend fun checkRequestingContributor(
+    request: ServerRequest,
+    next: suspend (ServerRequest) -> ServerResponse,
+    contributorHeaderKey: String,
+    nonAdminRequestAllowed: Boolean = false,
+): ServerResponse {
+    val requestingContributor = request.attributes()[contributorHeaderKey] as? RequestingContributor
+    return if (requestingContributor != null && (requestingContributor.isProjectAdmin || nonAdminRequestAllowed)) {
         next(request)
     } else {
-        status(HttpStatus.UNAUTHORIZED).buildAndAwait()
+        resolveUnauthorized(
+            "Requesting Contributor Header is not present or authorized",
+            "Requesting Contributor Header",
+        )
     }
 }
