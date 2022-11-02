@@ -80,7 +80,7 @@ private fun resolveErrorCode(
     HttpStatus.BAD_REQUEST -> "${element.replace(" ", "_").uppercase()}_INVALID"
     HttpStatus.NOT_FOUND -> "${element.replace(" ", "_").uppercase()}_NOT_FOUND"
     HttpStatus.UNAUTHORIZED -> "${element.replace(" ", "_").uppercase()}_UNAUTHORIZED"
-    else -> "${element?.replace(" ", "_")?.uppercase()}_ERROR"
+    else -> "${element.replace(" ", "_")?.uppercase()}_ERROR"
 }
 
 private fun resolveErrorMessage(

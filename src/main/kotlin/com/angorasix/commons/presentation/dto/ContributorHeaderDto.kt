@@ -8,6 +8,6 @@ package com.angorasix.commons.presentation.dto
  */
 data class ContributorHeaderDto(
     var contributorId: String,
-    var attributes: Map<String, String> = mutableMapOf(),
+    var attributes: Map<String, String>? = mutableMapOf(),
     var projectAdmin: Boolean = false,
 )
