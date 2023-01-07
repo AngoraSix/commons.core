@@ -1,5 +1,9 @@
 package com.angorasix.commons.infrastructure.presentation.error
 
+import org.springframework.hateoas.EntityModel
+import org.springframework.hateoas.Links
+import org.springframework.hateoas.MediaTypes
+import org.springframework.hateoas.mediatype.problem.Problem
 import org.springframework.http.HttpStatus
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.bodyValueAndAwait
@@ -10,18 +14,27 @@ import org.springframework.web.reactive.function.server.bodyValueAndAwait
  *
  * @author rozagerardo
  */
-suspend fun resolveExceptionResponse(ex: Exception, element: String = "Element"): ServerResponse =
+suspend fun resolveExceptionResponse(
+    ex: Exception,
+    element: String = "Element",
+    links: Links? = null,
+): ServerResponse =
     when (ex) {
-        is IllegalArgumentException -> ServerResponse.badRequest().bodyValueAndAwait(
-            ErrorResponseBody(
+        is IllegalArgumentException -> ServerResponse.badRequest().apply {
+            if (links != null && !links.isEmpty) contentType(MediaTypes.HAL_FORMS_JSON)
+        }.bodyValueAndAwait(
+            resolveProblem(
                 HttpStatus.BAD_REQUEST,
                 ex.javaClass.simpleName,
                 element,
                 ex.message,
             ),
         )
-        else -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).bodyValueAndAwait(
-            ErrorResponseBody(
+
+        else -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).apply {
+            if (links != null && !links.isEmpty) contentType(MediaTypes.HAL_FORMS_JSON)
+        }.bodyValueAndAwait(
+            resolveProblem(
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 ex.javaClass.simpleName,
                 element,
@@ -33,44 +46,63 @@ suspend fun resolveExceptionResponse(ex: Exception, element: String = "Element")
 suspend fun resolveNotFound(
     message: String = "Element not found",
     element: String = "Element",
+    links: Links? = null,
 ): ServerResponse =
-    ServerResponse.status(HttpStatus.NOT_FOUND).bodyValueAndAwait(
-        ErrorResponseBody(HttpStatus.NOT_FOUND, "ElementNotFound", element, message),
+    ServerResponse.status(HttpStatus.NOT_FOUND).apply {
+        if (links != null && !links.isEmpty) contentType(MediaTypes.HAL_FORMS_JSON)
+    }.bodyValueAndAwait(
+        resolveProblem(
+            HttpStatus.NOT_FOUND,
+            "ElementNotFound",
+            element,
+            message,
+            links,
+        ),
     )
 
 suspend fun resolveBadRequest(
     message: String = "Element is invalid",
     element: String = "Element",
+    links: Links? = null,
 ): ServerResponse =
-    ServerResponse.status(HttpStatus.BAD_REQUEST).bodyValueAndAwait(
-        ErrorResponseBody(HttpStatus.BAD_REQUEST, "ElementInvalid", element, message),
+    ServerResponse.status(HttpStatus.BAD_REQUEST).apply {
+        if (links != null && !links.isEmpty) contentType(MediaTypes.HAL_FORMS_JSON)
+    }.bodyValueAndAwait(
+        resolveProblem(HttpStatus.BAD_REQUEST, "ElementInvalid", element, message),
     )
 
 suspend fun resolveUnauthorized(
     message: String = "Element is invalid",
     element: String = "Element",
+    links: Links? = null,
 ): ServerResponse =
-    ServerResponse.status(HttpStatus.UNAUTHORIZED).bodyValueAndAwait(
-        ErrorResponseBody(HttpStatus.UNAUTHORIZED, "UnauthorizedDueToElement", element, message),
+    ServerResponse.status(HttpStatus.UNAUTHORIZED).apply {
+        if (links != null && !links.isEmpty) contentType(MediaTypes.HAL_FORMS_JSON)
+    }.bodyValueAndAwait(
+        resolveProblem(
+            HttpStatus.UNAUTHORIZED,
+            "UnauthorizedDueToElement",
+            element,
+            message,
+        ),
     )
 
-data class ErrorResponseBody private constructor(
-    val status: Int,
-    val error: String? = "",
-    val errorCode: String? = "UNCAUGHT_ERROR",
-    val message: String? = "",
-) {
-    constructor(
-        status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
-        error: String? = "",
-        element: String = "ELEMENT",
-        message: String? = null,
-    ) : this(
-        status.value(),
-        error,
-        resolveErrorCode(status, element),
-        message ?: resolveErrorMessage(status, element),
-    )
+fun resolveProblem(
+    status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
+    error: String? = "",
+    element: String = "ELEMENT",
+    message: String? = null,
+    links: Links? = null,
+): EntityModel<out Problem> {
+    val errorCode: String? = resolveErrorCode(status, element)
+    val message: String? = message ?: resolveErrorMessage(status, element)
+    val problem = Problem.create().withStatus(status).withTitle(error).withDetail(message)
+        .withProperties { map ->
+            map["errorCode"] = errorCode
+        }
+    val hateoasProblem = EntityModel.of(problem)
+    hateoasProblem.addAllIf(links != null && !links.isEmpty) { links }
+    return hateoasProblem
 }
 
 private fun resolveErrorCode(
