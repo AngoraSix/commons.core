@@ -20,27 +20,27 @@ suspend fun resolveExceptionResponse(
     links: Links? = null,
 ): ServerResponse =
     when (ex) {
-        is IllegalArgumentException -> ServerResponse.badRequest().apply {
-            if (links != null && !links.isEmpty) contentType(MediaTypes.HAL_FORMS_JSON)
-        }.bodyValueAndAwait(
-            resolveProblem(
-                HttpStatus.BAD_REQUEST,
-                ex.javaClass.simpleName,
-                element,
-                ex.message,
-            ),
-        )
+        is IllegalArgumentException -> ServerResponse.badRequest()
+            .contentType(MediaTypes.HAL_FORMS_JSON).bodyValueAndAwait(
+                resolveProblem(
+                    HttpStatus.BAD_REQUEST,
+                    ex.javaClass.simpleName,
+                    element,
+                    ex.message,
+                    links,
+                ),
+            )
 
-        else -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).apply {
-            if (links != null && !links.isEmpty) contentType(MediaTypes.HAL_FORMS_JSON)
-        }.bodyValueAndAwait(
-            resolveProblem(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                ex.javaClass.simpleName,
-                element,
-                ex.message,
-            ),
-        )
+        else -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .contentType(MediaTypes.HAL_FORMS_JSON).bodyValueAndAwait(
+                resolveProblem(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    ex.javaClass.simpleName,
+                    element,
+                    ex.message,
+                    links,
+                ),
+            )
     }
 
 suspend fun resolveNotFound(
@@ -48,44 +48,42 @@ suspend fun resolveNotFound(
     element: String = "Element",
     links: Links? = null,
 ): ServerResponse =
-    ServerResponse.status(HttpStatus.NOT_FOUND).apply {
-        if (links != null && !links.isEmpty) contentType(MediaTypes.HAL_FORMS_JSON)
-    }.bodyValueAndAwait(
-        resolveProblem(
-            HttpStatus.NOT_FOUND,
-            "ElementNotFound",
-            element,
-            message,
-            links,
-        ),
-    )
+    ServerResponse.status(HttpStatus.NOT_FOUND).contentType(MediaTypes.HAL_FORMS_JSON)
+        .bodyValueAndAwait(
+            resolveProblem(
+                HttpStatus.NOT_FOUND,
+                "ElementNotFound",
+                element,
+                message,
+                links,
+            ),
+        )
 
 suspend fun resolveBadRequest(
     message: String = "Element is invalid",
     element: String = "Element",
     links: Links? = null,
 ): ServerResponse =
-    ServerResponse.status(HttpStatus.BAD_REQUEST).apply {
-        if (links != null && !links.isEmpty) contentType(MediaTypes.HAL_FORMS_JSON)
-    }.bodyValueAndAwait(
-        resolveProblem(HttpStatus.BAD_REQUEST, "ElementInvalid", element, message),
-    )
+    ServerResponse.status(HttpStatus.BAD_REQUEST).contentType(MediaTypes.HAL_FORMS_JSON)
+        .bodyValueAndAwait(
+            resolveProblem(HttpStatus.BAD_REQUEST, "ElementInvalid", element, message, links),
+        )
 
 suspend fun resolveUnauthorized(
     message: String = "Element is invalid",
     element: String = "Element",
     links: Links? = null,
 ): ServerResponse =
-    ServerResponse.status(HttpStatus.UNAUTHORIZED).apply {
-        if (links != null && !links.isEmpty) contentType(MediaTypes.HAL_FORMS_JSON)
-    }.bodyValueAndAwait(
-        resolveProblem(
-            HttpStatus.UNAUTHORIZED,
-            "UnauthorizedDueToElement",
-            element,
-            message,
-        ),
-    )
+    ServerResponse.status(HttpStatus.UNAUTHORIZED).contentType(MediaTypes.HAL_FORMS_JSON)
+        .bodyValueAndAwait(
+            resolveProblem(
+                HttpStatus.UNAUTHORIZED,
+                "UnauthorizedDueToElement",
+                element,
+                message,
+                links,
+            ),
+        )
 
 fun resolveProblem(
     status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
