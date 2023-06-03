@@ -6,7 +6,7 @@ package com.angorasix.commons.domain
  *
  * @author rozagerardo
  */
-data class RequestingContributor constructor(
+data class SimpleContributor constructor(
     val id: String,
-    val isProjectAdmin: Boolean = false,
+    val grants: Set<String> = emptySet(),
 )

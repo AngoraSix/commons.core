@@ -7,6 +7,20 @@
       <artifactId>spring-webflux</artifactId>
       <groupId>org.springframework</groupId>
     </dependency>
+
+    <!-- security -->
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-oauth2-resource-server</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-oauth2-jose</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
     <!--    test-->
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
     <dependency>
@@ -49,7 +63,7 @@
     <artifactId>parent-pom-kotlin</artifactId>
     <groupId>com.angorasix</groupId>
     <relativePath/>
-    <version>0.1.2-SNAPSHOT</version> <!-- lookup parent from repository -->
+    <version>0.2.1</version> <!-- lookup parent from repository -->
   </parent>
-  <version>0.1.3-SNAPSHOT</version>
+  <version>0.2.0</version>
 </project>

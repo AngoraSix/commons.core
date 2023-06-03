@@ -1,6 +1,6 @@
 package com.angorasix.commons.presentation.dto
 
-import com.angorasix.commons.domain.RequestingContributor
+import com.angorasix.commons.domain.SimpleContributor
 import com.angorasix.commons.domain.modification.DomainObjectModification
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
@@ -17,7 +17,7 @@ class Patch @JsonCreator constructor(@get:JsonValue val operations: List<PatchOp
 
 data class PatchOperation(val op: String, val path: String, val value: JsonNode?) {
     fun toDomainObjectModification(
-        contributor: RequestingContributor,
+        contributor: SimpleContributor,
         supportedOperations: List<PatchOperationSpec>,
         objectMapper: ObjectMapper,
     ): DomainObjectModification<out Any, out Any> {
@@ -30,7 +30,7 @@ data class PatchOperation(val op: String, val path: String, val value: JsonNode?
 interface PatchOperationSpec {
     fun supportsPatchOperation(operation: PatchOperation): Boolean
     fun mapToObjectModification(
-        contributor: RequestingContributor,
+        contributor: SimpleContributor,
         operation: PatchOperation,
         objectMapper: ObjectMapper,
     ): DomainObjectModification<out Any, out Any>

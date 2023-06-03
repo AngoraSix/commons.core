@@ -1,12 +1,12 @@
 package com.angorasix.commons.presentation.filter
 
-import com.angorasix.commons.domain.RequestingContributor
-import com.angorasix.commons.infrastructure.presentation.error.resolveUnauthorized
-import com.angorasix.commons.presentation.dto.ContributorHeaderDto
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.angorasix.commons.domain.SimpleContributor
+import com.angorasix.commons.infrastructure.constants.AngoraSixInfrastructure
+import com.angorasix.commons.infrastructure.oauth2.constants.A6WellKnownClaims
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
-import java.util.*
+import org.springframework.web.reactive.function.server.awaitPrincipal
 
 /**
  *
@@ -16,37 +16,17 @@ import java.util.*
 suspend fun extractRequestingContributor(
     request: ServerRequest,
     next: suspend (ServerRequest) -> ServerResponse,
-    contributorHeaderKey: String,
-    objectMapper: ObjectMapper,
 ): ServerResponse {
-    request.headers().header(contributorHeaderKey).firstOrNull()?.let {
-        val contributorHeaderString = String(Base64.getUrlDecoder().decode(it))
-        val contributorHeader = objectMapper.readValue(
-            contributorHeaderString,
-            ContributorHeaderDto::class.java,
-        )
-        val requestingContributorToken = RequestingContributor(
-            contributorHeader.contributorId,
-            contributorHeader.projectAdmin,
-        )
-        request.attributes()[contributorHeaderKey] = requestingContributorToken
+    val authentication = request.awaitPrincipal() as JwtAuthenticationToken?
+    val jwtPrincipal = authentication?.token
+    jwtPrincipal?.let {
+        val requestingContributor =
+            SimpleContributor(
+                it.getClaim(A6WellKnownClaims.CONTRIBUTOR_ID),
+                authentication.authorities.map { it.authority }.toSet(),
+            )
+        request.attributes()[AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY] =
+            requestingContributor
     }
     return next(request)
-}
-
-suspend fun checkRequestingContributor(
-    request: ServerRequest,
-    next: suspend (ServerRequest) -> ServerResponse,
-    contributorHeaderKey: String,
-    nonAdminRequestAllowed: Boolean = false,
-): ServerResponse {
-    val requestingContributor = request.attributes()[contributorHeaderKey] as? RequestingContributor
-    return if (requestingContributor != null && (requestingContributor.isProjectAdmin || nonAdminRequestAllowed)) {
-        next(request)
-    } else {
-        resolveUnauthorized(
-            "Requesting Contributor Header is not present or authorized",
-            "Requesting Contributor Header",
-        )
-    }
 }
