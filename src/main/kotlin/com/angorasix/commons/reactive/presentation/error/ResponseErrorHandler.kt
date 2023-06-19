@@ -1,4 +1,4 @@
-package com.angorasix.commons.infrastructure.presentation.error
+package com.angorasix.commons.reactive.presentation.error
 
 import org.springframework.hateoas.EntityModel
 import org.springframework.hateoas.Links
