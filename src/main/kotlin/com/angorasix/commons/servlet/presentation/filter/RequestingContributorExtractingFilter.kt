@@ -1,23 +1,24 @@
-package com.angorasix.commons.presentation.filter
+package com.angorasix.commons.servlet.presentation.filter
 
 import com.angorasix.commons.domain.SimpleContributor
 import com.angorasix.commons.infrastructure.constants.AngoraSixInfrastructure
 import com.angorasix.commons.infrastructure.oauth2.constants.A6WellKnownClaims
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken
-import org.springframework.web.reactive.function.server.ServerRequest
-import org.springframework.web.reactive.function.server.ServerResponse
-import org.springframework.web.reactive.function.server.awaitPrincipal
+import org.springframework.web.servlet.function.ServerRequest
+import org.springframework.web.servlet.function.ServerResponse
+import org.springframework.web.servlet.function.principalOrNull
 
 /**
- *
+ * <p>
+ * </p>
  *
  * @author rozagerardo
  */
-suspend fun extractRequestingContributor(
+fun extractRequestingContributor(
     request: ServerRequest,
-    next: suspend (ServerRequest) -> ServerResponse,
+    next: (ServerRequest) -> ServerResponse,
 ): ServerResponse {
-    val authentication = request.awaitPrincipal() as JwtAuthenticationToken?
+    val authentication = request.principalOrNull() as JwtAuthenticationToken?
     val jwtPrincipal = authentication?.token
     jwtPrincipal?.let {
         val requestingContributor =

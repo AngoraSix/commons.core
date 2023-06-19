@@ -1,4 +1,4 @@
-package com.angorasix.commons.presentation.filter
+package com.angorasix.commons.reactive.presentation.filter
 
 import com.angorasix.commons.domain.SimpleContributor
 import com.angorasix.commons.infrastructure.constants.AngoraSixInfrastructure
