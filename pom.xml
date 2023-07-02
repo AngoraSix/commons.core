@@ -75,7 +75,7 @@
     <artifactId>parent-pom-kotlin</artifactId>
     <groupId>com.angorasix</groupId>
     <relativePath/>
-    <version>0.2.1</version> <!-- lookup parent from repository -->
+    <version>0.2.2</version> <!-- lookup parent from repository -->
   </parent>
-  <version>0.2.1</version>
+  <version>0.2.2</version>
 </project>
