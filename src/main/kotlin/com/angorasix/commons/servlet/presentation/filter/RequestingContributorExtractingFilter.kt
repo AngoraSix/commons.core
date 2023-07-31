@@ -25,6 +25,8 @@ fun extractRequestingContributor(
             SimpleContributor(
                 it.getClaim(A6WellKnownClaims.CONTRIBUTOR_ID),
                 authentication.authorities.map { it.authority }.toSet(),
+                request.headers()
+                    .firstHeader(AngoraSixInfrastructure.REQUEST_IS_ADMIN_HINT_HEADER) == "true",
             )
         request.attributes()[AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY] =
             requestingContributor

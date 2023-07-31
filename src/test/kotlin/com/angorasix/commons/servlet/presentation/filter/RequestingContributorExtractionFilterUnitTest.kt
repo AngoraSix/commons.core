@@ -52,7 +52,7 @@ class RequestingContributorExtractionFilterUnitTest {
             assertThat(mockedRequest.attributes()).containsKey(AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY)
             val requestingContributor =
                 mockedRequest.attributes()[AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY] as SimpleContributor
-            assertThat(requestingContributor.id).isEqualTo("contributorIdValue")
+            assertThat(requestingContributor.contributorId).isEqualTo("contributorIdValue")
             assertThat(requestingContributor.grants).isEmpty()
         }
 }
