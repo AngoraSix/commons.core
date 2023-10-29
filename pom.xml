@@ -84,5 +84,5 @@
     <relativePath/>
     <version>0.2.2</version> <!-- lookup parent from repository -->
   </parent>
-  <version>0.2.4</version>
+  <version>0.2.5</version>
 </project>
