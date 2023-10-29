@@ -1,7 +1,20 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.angorasix</groupId>
   <artifactId>commons.core</artifactId>
+  <packaging>jar</packaging>
+  <version>0.2.6</version>
+
+  <parent>
+    <artifactId>parent-pom-kotlin</artifactId>
+    <groupId>com.angorasix</groupId>
+    <relativePath/>
+    <version>0.2.3</version> <!-- lookup parent from repository -->
+  </parent>
+
   <dependencies>
     <dependency>
       <artifactId>spring-webflux</artifactId>
@@ -74,15 +87,34 @@
     <jacoco-coverage.class.line.min>0.35</jacoco-coverage.class.line.min>
     <jacoco-coverage.class.branch.min>0.35</jacoco-coverage.class.branch.min>
   </properties>
-  <groupId>com.angorasix</groupId>
-  <modelVersion>4.0.0</modelVersion>
-  <name>commons.core</name>
-  <packaging>jar</packaging>
-  <parent>
-    <artifactId>parent-pom-kotlin</artifactId>
-    <groupId>com.angorasix</groupId>
-    <relativePath/>
-    <version>0.2.2</version> <!-- lookup parent from repository -->
-  </parent>
-  <version>0.2.5</version>
+
+
+
+  <name>Angorasix - Commons Library</name>
+  <description>Commons functionality for Angorasix project stack</description>
+  <url>https://angorasix.com</url>
+
+  <licenses>
+    <license>
+      <name>GNU GENERAL PUBLIC LICENSE, Version 3</name>
+      <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Gerardo Roza</name>
+      <email>rozagerardo@gmail.com</email>
+      <organization>AngoraSix</organization>
+      <organizationUrl>https://angorasix.com</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/AngoraSix/commons.core.git</connection>
+    <developerConnection>scm:git:ssh://github.com:AngoraSix/commons.core.git</developerConnection>
+    <url>https://github.com/AngoraSix/commons.core</url>
+  </scm>
+
 </project>
