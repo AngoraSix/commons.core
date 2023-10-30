@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -5,15 +6,19 @@
 
   <groupId>com.angorasix</groupId>
   <artifactId>commons.core</artifactId>
-  <packaging>jar</packaging>
   <version>0.2.6</version>
+  <packaging>jar</packaging>
 
   <parent>
     <artifactId>parent-pom-kotlin</artifactId>
     <groupId>com.angorasix</groupId>
-    <relativePath/>
     <version>0.2.3</version> <!-- lookup parent from repository -->
   </parent>
+
+  <properties>
+    <jacoco-coverage.class.line.min>0.35</jacoco-coverage.class.line.min>
+    <jacoco-coverage.class.branch.min>0.35</jacoco-coverage.class.branch.min>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -45,7 +50,6 @@
       <artifactId>spring-data-commons</artifactId>
       <scope>provided</scope>
     </dependency>
-
 
     <!--    test-->
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
@@ -83,12 +87,6 @@
       <artifactId>spring-hateoas</artifactId>
     </dependency>
   </dependencies>
-  <properties>
-    <jacoco-coverage.class.line.min>0.35</jacoco-coverage.class.line.min>
-    <jacoco-coverage.class.branch.min>0.35</jacoco-coverage.class.branch.min>
-  </properties>
-
-
 
   <name>Angorasix - Commons Library</name>
   <description>Commons functionality for Angorasix project stack</description>
@@ -111,10 +109,20 @@
     </developer>
   </developers>
 
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
   <scm>
     <connection>scm:git:git://github.com/AngoraSix/commons.core.git</connection>
     <developerConnection>scm:git:ssh://github.com:AngoraSix/commons.core.git</developerConnection>
     <url>https://github.com/AngoraSix/commons.core</url>
   </scm>
-
 </project>
