@@ -108,21 +108,4 @@
       <organizationUrl>https://angorasix.com</organizationUrl>
     </developer>
   </developers>
-
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
-
-  <scm>
-    <connection>scm:git:git://github.com/AngoraSix/commons.core.git</connection>
-    <developerConnection>scm:git:ssh://github.com:AngoraSix/commons.core.git</developerConnection>
-    <url>https://github.com/AngoraSix/commons.core</url>
-  </scm>
 </project>
