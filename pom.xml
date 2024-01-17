@@ -6,18 +6,19 @@
 
   <groupId>com.angorasix</groupId>
   <artifactId>commons.core</artifactId>
-  <version>0.2.6</version>
+  <version>0.2.7</version>
   <packaging>jar</packaging>
 
   <parent>
     <artifactId>parent-pom-kotlin</artifactId>
     <groupId>com.angorasix</groupId>
-    <version>0.2.7</version> <!-- lookup parent from repository -->
+    <version>0.2.7</version>
+    <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
   <properties>
-    <jacoco-coverage.class.line.min>0.35</jacoco-coverage.class.line.min>
-    <jacoco-coverage.class.branch.min>0.35</jacoco-coverage.class.branch.min>
+    <jacoco-coverage.class.line.min>0.5</jacoco-coverage.class.line.min>
+    <jacoco-coverage.class.branch.min>0.5</jacoco-coverage.class.branch.min>
   </properties>
 
   <dependencies>
