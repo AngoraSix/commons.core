@@ -1,6 +1,6 @@
 package com.angorasix.commons.infrastructure.intercommunication.messaging.dto
 
-import com.angorasix.commons.domain.SimpleContributor
+import com.angorasix.commons.domain.DetailedContributor
 import com.angorasix.commons.infrastructure.intercommunication.A6DomainResource
 
 /**
@@ -15,6 +15,6 @@ data class A6InfraMessageDto(
     val objectId: String,
     val objectType: String,
     val topic: String,
-    val requestingContributor: SimpleContributor,
+    val requestingContributor: DetailedContributor,
     val messageData: Map<String, Any>,
 )
