@@ -35,3 +35,24 @@ interface PatchOperationSpec {
         objectMapper: ObjectMapper,
     ): DomainObjectModification<out Any, out Any>
 }
+
+class BulkPatch @JsonCreator constructor(@get:JsonValue val operations: List<BulkPatchOperation>)
+
+data class BulkPatchOperation(val op: String, val path: String, val value: JsonNode?) {
+    fun toBulkModificationStrategy(
+        contributor: SimpleContributor,
+        supportedOperations: List<BulkPatchOperationSpec>,
+    ): String {
+        return supportedOperations.find { it.supportsPatchOperation(this) }
+            ?.mapToStrategyId(contributor, this)
+            ?: throw IllegalArgumentException("Bulk Patch Operation not supported")
+    }
+}
+
+interface BulkPatchOperationSpec {
+    fun supportsPatchOperation(operation: BulkPatchOperation): Boolean
+    fun mapToStrategyId(
+        contributor: SimpleContributor,
+        operation: BulkPatchOperation,
+    ): String
+}
