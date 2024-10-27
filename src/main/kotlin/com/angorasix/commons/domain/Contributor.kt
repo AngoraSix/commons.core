@@ -22,10 +22,19 @@ open class SimpleContributor(
 }
 
 data class DetailedContributor(
-    override val contributorId: String,
-    override val grants: Set<String> = emptySet(),
+    @Transient override val contributorId: String,
+    @Transient override val grants: Set<String> = emptySet(),
     @Transient override val isAdminHint: Boolean? = false,
     val firstName: String?,
     val lastName: String?,
     val profileMedia: A6Media?,
-) : SimpleContributor(contributorId, grants, isAdminHint)
+) : SimpleContributor(contributorId, grants, isAdminHint) {
+    @PersistenceCreator
+    constructor(
+        contributorId: String,
+        grants: Set<String> = emptySet(),
+        firstName: String?,
+        lastName: String?,
+        profileMedia: A6Media?,
+    ) : this(contributorId, grants, null, firstName, lastName, profileMedia)
+}
