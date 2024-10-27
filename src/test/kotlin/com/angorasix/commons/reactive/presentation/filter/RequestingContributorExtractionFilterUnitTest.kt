@@ -34,7 +34,7 @@ class RequestingContributorExtractionFilterUnitTest {
         runTest {
             val jwt: Jwt =
                 Jwt.withTokenValue("tokenValue").expiresAt(Instant.now().plusSeconds(5000))
-                    .issuer("http://localhost:9081")
+                    .issuer("http://localhost:10100")
                     .header("alg", "ger")
                     .claim(A6WellKnownClaims.CONTRIBUTOR_ID, "contributorIdValue")
                     .claim(StandardClaimNames.NICKNAME, "firstName")
@@ -72,7 +72,7 @@ class RequestingContributorExtractionFilterUnitTest {
         runTest {
             val jwt: Jwt =
                 Jwt.withTokenValue("tokenValue").expiresAt(Instant.now().plusSeconds(5000))
-                    .issuer("http://localhost:9081")
+                    .issuer("http://localhost:10100")
                     .header("alg", "ger")
                     .claim(A6WellKnownClaims.CONTRIBUTOR_ID, "contributorIdValue").build()
             val authentication = JwtAuthenticationToken(jwt)
