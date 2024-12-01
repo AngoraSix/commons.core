@@ -1,4 +1,4 @@
-package com.angorasix.commons.infrastructure.intercommunication.events.dto
+package com.angorasix.commons.infrastructure.intercommunication.dto.events
 
 /**
  * <p>

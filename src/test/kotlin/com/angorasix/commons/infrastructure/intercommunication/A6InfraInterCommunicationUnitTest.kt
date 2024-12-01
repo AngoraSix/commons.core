@@ -1,5 +1,7 @@
 package com.angorasix.commons.infrastructure.intercommunication
 
+import com.angorasix.commons.infrastructure.intercommunication.dto.A6DomainResource
+import com.angorasix.commons.infrastructure.intercommunication.dto.A6InfraTopics
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -32,8 +34,8 @@ class A6InfraInterCommunicationUnitTest {
     @Throws(Exception::class)
     fun `Given A6DomainResource - When getValue - Then corresponding value is retrieved`() =
         runTest {
-            val clubResource = A6DomainResource.CLUB
-            val contributorResource = A6DomainResource.CONTRIBUTOR
+            val clubResource = A6DomainResource.Club
+            val contributorResource = A6DomainResource.Contributor
 
             val clubResourceValue = clubResource.value
             val contributorResourceValue = contributorResource.value
