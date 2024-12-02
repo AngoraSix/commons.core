@@ -20,8 +20,6 @@ sealed class A6DomainResource(val value: String) {
     companion object {
         @JsonCreator
         fun fromValue(value: String): A6DomainResource {
-            println("GERGERGERGER")
-            println(value)
             return when (value) {
                 Contributor.value -> Contributor
                 Club.value -> Club
@@ -41,4 +39,5 @@ enum class A6InfraTopics(val value: String) {
 
     // INTEGRATIONS
     TASKS_INTEGRATION_FULL_SYNCING("tasksIntegrationFullSyncing"),
+    TASKS_INTEGRATION_SYNCING_CORRESPONDENCE("tasksIntegrationSyncingCorrespondence"),
 }

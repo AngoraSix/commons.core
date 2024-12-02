@@ -24,10 +24,6 @@ data class A6InfraBulkResourceDto<T : A6DomainResource>(
         fun <T : A6DomainResource> fromMap(
             map: Map<String, Any>,
         ): A6InfraBulkResourceDto<T> {
-            println("BBBBBBB1")
-            println(map["type"] as String)
-            println(A6DomainResource.fromValue(map["type"] as String) as T)
-            println(map["collection"] as List<A6InfraResourceDto<T>>)
             return A6InfraBulkResourceDto(
                 A6DomainResource.fromValue(map["type"] as String) as T,
                 map["collection"] as List<A6InfraResourceDto<T>>,
