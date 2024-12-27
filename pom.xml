@@ -6,7 +6,7 @@
 
   <groupId>com.angorasix</groupId>
   <artifactId>commons.core</artifactId>
-  <version>0.2.12</version>
+  <version>0.2.13-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <parent>

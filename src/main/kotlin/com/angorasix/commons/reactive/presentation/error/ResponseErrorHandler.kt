@@ -92,8 +92,8 @@ fun resolveProblem(
     message: String? = null,
     links: Links? = null,
 ): EntityModel<out Problem> {
-    val errorCode: String? = resolveErrorCode(status, element)
-    val message: String? = message ?: resolveErrorMessage(status, element)
+    val errorCode: String = resolveErrorCode(status, element)
+    val message: String = message ?: resolveErrorMessage(status, element)
     val problem = Problem.create().withStatus(status).withTitle(error).withDetail(message)
         .withProperties { map ->
             map["errorCode"] = errorCode

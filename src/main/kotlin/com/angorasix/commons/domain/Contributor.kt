@@ -25,6 +25,7 @@ data class DetailedContributor(
     @Transient override val contributorId: String,
     @Transient override val grants: Set<String> = emptySet(),
     @Transient override val isAdminHint: Boolean? = false,
+    val email: String?,
     val firstName: String?,
     val lastName: String?,
     val profileMedia: A6Media?,
@@ -33,8 +34,9 @@ data class DetailedContributor(
     constructor(
         contributorId: String,
         grants: Set<String> = emptySet(),
+        email: String?,
         firstName: String?,
         lastName: String?,
         profileMedia: A6Media?,
-    ) : this(contributorId, grants, null, firstName, lastName, profileMedia)
+    ) : this(contributorId, grants, null, email, firstName, lastName, profileMedia)
 }

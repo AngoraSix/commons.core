@@ -40,4 +40,7 @@ enum class A6InfraTopics(val value: String) {
     // INTEGRATIONS
     TASKS_INTEGRATION_FULL_SYNCING("tasksIntegrationFullSyncing"),
     TASKS_INTEGRATION_SYNCING_CORRESPONDENCE("tasksIntegrationSyncingCorrespondence"),
+
+    // INTEGRATIONS
+    CLUB_INVITATION("clubInvitation"),
 }

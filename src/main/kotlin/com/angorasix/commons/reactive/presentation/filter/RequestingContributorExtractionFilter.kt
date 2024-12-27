@@ -33,6 +33,7 @@ suspend fun extractRequestingContributor(
                 authentication.authorities.map { it.authority }.toSet(),
                 request.headers()
                     .firstHeader(AngoraSixInfrastructure.REQUEST_IS_ADMIN_HINT_HEADER) == "true",
+                it.getClaim(StandardClaimNames.EMAIL),
                 firstName,
                 it.getClaim(StandardClaimNames.FAMILY_NAME),
                 it.getClaimAsString(StandardClaimNames.PICTURE)?.let { pictureUrl ->
