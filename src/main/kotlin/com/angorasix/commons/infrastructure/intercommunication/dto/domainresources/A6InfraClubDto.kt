@@ -12,4 +12,5 @@ data class A6InfraClubDto(
     val id: String,
     val name: String,
     val description: String,
+    val projectId: String?,
 ) : A6InfraResourceDto<A6DomainResource.Club>(A6DomainResource.Club)
