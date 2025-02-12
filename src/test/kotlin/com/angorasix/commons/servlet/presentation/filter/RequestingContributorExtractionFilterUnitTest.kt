@@ -36,6 +36,7 @@ class RequestingContributorExtractionFilterUnitTest {
                     .issuer("http://localhost:10100")
                     .header("alg", "ger")
                     .claim(A6WellKnownClaims.CONTRIBUTOR_ID, "contributorIdValue")
+                    .claim(StandardClaimNames.EMAIL, "contributor@thedomain.com")
                     .claim(StandardClaimNames.GIVEN_NAME, "firstName")
                     .claim(StandardClaimNames.FAMILY_NAME, "lastName")
                     .claim(StandardClaimNames.PICTURE, "http://example.com/image.jpg").build()

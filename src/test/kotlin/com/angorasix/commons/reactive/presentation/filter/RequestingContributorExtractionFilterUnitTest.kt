@@ -37,6 +37,7 @@ class RequestingContributorExtractionFilterUnitTest {
                     .issuer("http://localhost:10100")
                     .header("alg", "ger")
                     .claim(A6WellKnownClaims.CONTRIBUTOR_ID, "contributorIdValue")
+                    .claim(StandardClaimNames.EMAIL, "contributor@thedomain.com")
                     .claim(StandardClaimNames.NICKNAME, "firstName")
                     .claim(StandardClaimNames.FAMILY_NAME, "lastName")
                     .claim(StandardClaimNames.PICTURE, "http://example.com/image.jpg").build()
@@ -60,6 +61,7 @@ class RequestingContributorExtractionFilterUnitTest {
                 mockedRequest.attributes()[AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY] as DetailedContributor
             assertThat(requestingContributor.contributorId).isEqualTo("contributorIdValue")
             assertThat(requestingContributor.grants).isEmpty()
+            assertThat(requestingContributor.email).isEqualTo("contributor@thedomain.com")
             assertThat(requestingContributor.firstName).isEqualTo("firstName")
             assertThat(requestingContributor.lastName).isEqualTo("lastName")
             assertThat(requestingContributor.profileMedia?.mediaType).isEqualTo(A6MediaTypes.IMAGE.value)
