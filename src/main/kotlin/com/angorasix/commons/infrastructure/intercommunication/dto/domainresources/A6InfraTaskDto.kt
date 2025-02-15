@@ -18,4 +18,16 @@ data class A6InfraTaskDto(
     val done: Boolean = false,
     val sourceType: String? = null,
     val angorasixId: String? = null,
+    val estimations: A6InfraTaskEstimationDto? = null,
 ) : A6InfraResourceDto<A6DomainResource.Task>(A6DomainResource.Task)
+
+data class A6InfraTaskEstimationDto(
+    val caps: Double?,
+    val strategy: String?,
+
+    val effort: Double?,
+    val complexity: Double?,
+    val industry: String?,
+    val industryModifier: Double?,
+    val moneyPayment: Double?,
+)
