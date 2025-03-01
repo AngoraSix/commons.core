@@ -29,8 +29,14 @@ data class InlineFieldOptions(
 data class OptionSpec(
     val value: String,
     val prompt: String, // key for the UI to show the label appropriately
+    val promptData: Map<String, Any>? = null, // if it's a complex select field, this will be used to show the data
 )
 
 enum class FieldSpec(val value: String) {
-    TEXT("text"), SELECT("select"), DATE("date"), TIME("time"), DATETIME("datetime")
+    TEXT("text"),
+    SELECT("select"),
+    DATE("date"),
+    TIME("time"),
+    DATETIME("datetime"),
+    SELECT_COMPLEX("select_complex"),
 }
