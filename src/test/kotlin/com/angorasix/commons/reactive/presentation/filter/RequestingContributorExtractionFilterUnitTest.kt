@@ -19,7 +19,6 @@ import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.buildAndAwait
 import java.time.Instant
-import java.util.*
 
 /**
  * @author rozagerardo
@@ -27,23 +26,24 @@ import java.util.*
 @OptIn(ExperimentalCoroutinesApi::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RequestingContributorExtractionFilterUnitTest {
-
     @Test
     @Throws(Exception::class)
     fun `Given request with Jwt principal and data - When extractRequestingContributor invoked - Then request contains attribute`() =
         runTest {
             val jwt: Jwt =
-                Jwt.withTokenValue("tokenValue").expiresAt(Instant.now().plusSeconds(5000))
+                Jwt
+                    .withTokenValue("tokenValue")
+                    .expiresAt(Instant.now().plusSeconds(5000))
                     .issuer("http://localhost:10100")
                     .header("alg", "ger")
                     .claim(A6WellKnownClaims.CONTRIBUTOR_ID, "contributorIdValue")
                     .claim(StandardClaimNames.EMAIL, "contributor@thedomain.com")
                     .claim(StandardClaimNames.NICKNAME, "firstName")
                     .claim(StandardClaimNames.FAMILY_NAME, "lastName")
-                    .claim(StandardClaimNames.PICTURE, "http://example.com/image.jpg").build()
+                    .claim(StandardClaimNames.PICTURE, "http://example.com/image.jpg")
+                    .build()
             val authentication = JwtAuthenticationToken(jwt)
-            val mockedRequest: ServerRequest =
-                MockServerRequest.builder().principal(authentication).build()
+            val mockedRequest: ServerRequest = MockServerRequest.builder().principal(authentication).build()
             val next: suspend (request: ServerRequest) -> ServerResponse = {
                 ServerResponse.ok().buildAndAwait()
             }
@@ -54,8 +54,7 @@ class RequestingContributorExtractionFilterUnitTest {
                     next,
                 )
 
-            assertThat(outputResponse.statusCode())
-                .isEqualTo(HttpStatus.OK)
+            assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.OK)
             assertThat(mockedRequest.attributes()).containsKey(AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY)
             val requestingContributor =
                 mockedRequest.attributes()[AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY] as DetailedContributor
@@ -70,16 +69,18 @@ class RequestingContributorExtractionFilterUnitTest {
 
     @Test
     @Throws(Exception::class)
-    fun `Given request with Jwt principal only base fields - When extractRequestingContributor invoked - Then request contains attribute`() =
+    fun `Given request with Jwt principal only base fields - When extracting contributor invoked - Then request contains attribute`() =
         runTest {
             val jwt: Jwt =
-                Jwt.withTokenValue("tokenValue").expiresAt(Instant.now().plusSeconds(5000))
+                Jwt
+                    .withTokenValue("tokenValue")
+                    .expiresAt(Instant.now().plusSeconds(5000))
                     .issuer("http://localhost:10100")
                     .header("alg", "ger")
-                    .claim(A6WellKnownClaims.CONTRIBUTOR_ID, "contributorIdValue").build()
+                    .claim(A6WellKnownClaims.CONTRIBUTOR_ID, "contributorIdValue")
+                    .build()
             val authentication = JwtAuthenticationToken(jwt)
-            val mockedRequest: ServerRequest =
-                MockServerRequest.builder().principal(authentication).build()
+            val mockedRequest: ServerRequest = MockServerRequest.builder().principal(authentication).build()
             val next: suspend (request: ServerRequest) -> ServerResponse = {
                 ServerResponse.ok().buildAndAwait()
             }
@@ -90,8 +91,7 @@ class RequestingContributorExtractionFilterUnitTest {
                     next,
                 )
 
-            assertThat(outputResponse.statusCode())
-                .isEqualTo(HttpStatus.OK)
+            assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.OK)
             assertThat(mockedRequest.attributes()).containsKey(AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY)
             val requestingContributor =
                 mockedRequest.attributes()[AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY] as SimpleContributor
@@ -112,10 +112,12 @@ class RequestingContributorExtractionFilterUnitTest {
     fun `Given request with Affected Contributors Headers - When extractAffectedContributors invoked - Then request contains attribute`() =
         runTest {
             val mockedRequest: ServerRequest =
-                MockServerRequest.builder().header(
-                    AngoraSixInfrastructure.EVENT_AFFECTED_CONTRIBUTOR_IDS_HEADER,
-                    "id1,id2,id99",
-                ).build()
+                MockServerRequest
+                    .builder()
+                    .header(
+                        AngoraSixInfrastructure.EVENT_AFFECTED_CONTRIBUTOR_IDS_HEADER,
+                        "id1,id2,id99",
+                    ).build()
             val next: suspend (request: ServerRequest) -> ServerResponse = {
                 ServerResponse.ok().buildAndAwait()
             }
@@ -126,8 +128,7 @@ class RequestingContributorExtractionFilterUnitTest {
                     next,
                 )
 
-            assertThat(outputResponse.statusCode())
-                .isEqualTo(HttpStatus.OK)
+            assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.OK)
             assertThat(mockedRequest.attributes()).containsKey(AngoraSixInfrastructure.REQUEST_ATTRIBUTE_AFFECTED_CONTRIBUTORS_KEY)
             val affectedContributors =
                 mockedRequest.attributes()[AngoraSixInfrastructure.REQUEST_ATTRIBUTE_AFFECTED_CONTRIBUTORS_KEY] as List<String>
@@ -136,10 +137,9 @@ class RequestingContributorExtractionFilterUnitTest {
 
     @Test
     @Throws(Exception::class)
-    fun `Given request without Affected Contributors Headers - When extractAffectedContributors invoked but not required - Then Bad Request response retrieved`() =
+    fun `Given no Affected Contributors Headers - When extract contributors not required - Then Bad Request response retrieved`() =
         runTest {
-            val mockedRequest: ServerRequest =
-                MockServerRequest.builder().build()
+            val mockedRequest: ServerRequest = MockServerRequest.builder().build()
             val next: suspend (request: ServerRequest) -> ServerResponse = {
                 ServerResponse.ok().buildAndAwait()
             }
@@ -150,17 +150,15 @@ class RequestingContributorExtractionFilterUnitTest {
                     next,
                 )
 
-            assertThat(outputResponse.statusCode())
-                .isEqualTo(HttpStatus.OK)
+            assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.OK)
             assertThat(mockedRequest.attributes()).doesNotContainKey(AngoraSixInfrastructure.REQUEST_ATTRIBUTE_AFFECTED_CONTRIBUTORS_KEY)
         }
 
     @Test
     @Throws(Exception::class)
-    fun `Given request without Affected Contributors Headers - When extractAffectedContributors invoked and required - Then Bad Request response retrieved`() =
+    fun `Given no Affected Contributors Headers - When extract contributor required - Then Bad Request response retrieved`() =
         runTest {
-            val mockedRequest: ServerRequest =
-                MockServerRequest.builder().build()
+            val mockedRequest: ServerRequest = MockServerRequest.builder().build()
             val next: suspend (request: ServerRequest) -> ServerResponse = {
                 ServerResponse.ok().buildAndAwait()
             }
@@ -172,8 +170,7 @@ class RequestingContributorExtractionFilterUnitTest {
                     true,
                 )
 
-            assertThat(outputResponse.statusCode())
-                .isEqualTo(HttpStatus.BAD_REQUEST)
+            assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST)
             assertThat(mockedRequest.attributes()).doesNotContainKey(AngoraSixInfrastructure.REQUEST_ATTRIBUTE_AFFECTED_CONTRIBUTORS_KEY)
         }
 }

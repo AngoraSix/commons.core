@@ -24,7 +24,6 @@ data class A6InfraTaskDto(
 data class A6InfraTaskEstimationDto(
     val caps: Double?,
     val strategy: String?,
-
     val effort: Double?,
     val complexity: Double?,
     val industry: String?,

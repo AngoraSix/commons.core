@@ -6,4 +6,6 @@ package com.angorasix.commons.presentation.dto
  *
  * @author rozagerardo
  */
-data class IsAdminDto(val isAdmin: Boolean)
+data class IsAdminDto(
+    val isAdmin: Boolean,
+)

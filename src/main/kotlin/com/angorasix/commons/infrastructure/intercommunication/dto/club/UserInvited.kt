@@ -1,8 +1,8 @@
-package com.angorasix.commons.infrastructure.intercommunication.dto.invitations
+package com.angorasix.commons.infrastructure.intercommunication.dto.club
 
 import com.angorasix.commons.infrastructure.intercommunication.dto.domainresources.A6InfraClubDto
 
-class A6InfraClubInvitation(
+class UserInvited(
     val email: String,
     val club: A6InfraClubDto,
     val token: String,

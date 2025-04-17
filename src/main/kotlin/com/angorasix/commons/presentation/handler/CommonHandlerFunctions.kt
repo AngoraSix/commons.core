@@ -9,11 +9,10 @@ import com.angorasix.commons.presentation.dto.A6MediaDto
  *
  * @author rozagerardo
  */
-fun A6Media.convertToDto(): A6MediaDto {
-    return A6MediaDto(
+fun A6Media.convertToDto(): A6MediaDto =
+    A6MediaDto(
         mediaType,
         url,
         thumbnailUrl,
         resourceId,
     )
-}

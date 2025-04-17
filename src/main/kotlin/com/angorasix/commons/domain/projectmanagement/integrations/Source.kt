@@ -7,6 +7,9 @@ package com.angorasix.commons.domain.projectmanagement.integrations
  *
  * @author rozagerardo
  */
-enum class Source(val value: String) {
-    ANGORASIX("angorasix"), TRELLO("trello")
+enum class Source(
+    val value: String,
+) {
+    ANGORASIX("angorasix"),
+    TRELLO("trello"),
 }

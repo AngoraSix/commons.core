@@ -24,14 +24,16 @@ fun extractRequestingContributor(
     val authentication = request.principalOrNull() as JwtAuthenticationToken?
     val jwtPrincipal = authentication?.token
     jwtPrincipal?.let {
-        val firstName = it.getClaimAsString(StandardClaimNames.GIVEN_NAME) ?: it.getClaimAsString(
-            StandardClaimNames.NAME,
-        )
+        val firstName =
+            it.getClaimAsString(StandardClaimNames.GIVEN_NAME) ?: it.getClaimAsString(
+                StandardClaimNames.NAME,
+            )
         val requestingContributor =
             DetailedContributor(
                 it.getClaim(A6WellKnownClaims.CONTRIBUTOR_ID),
                 authentication.authorities.map { it.authority }.toSet(),
-                request.headers()
+                request
+                    .headers()
                     .firstHeader(AngoraSixInfrastructure.REQUEST_IS_ADMIN_HINT_HEADER) == "true",
                 it.getClaim(StandardClaimNames.EMAIL),
                 firstName,

@@ -13,11 +13,10 @@ data class A6InfraBulkSyncingCorrespondenceDto(
     val a6Type: A6DomainResource,
     val collection: List<A6InfraSyncingCorrespondenceDto>,
 ) {
-    fun toMap(): Map<String, Any> {
-        return mapOf(
+    fun toMap(): Map<String, Any> =
+        mapOf(
             "sourceType" to sourceType,
             "a6Type" to a6Type.value,
             "collection" to collection,
         )
-    }
 }

@@ -13,6 +13,8 @@ open class A6Media(
     val resourceId: String,
 )
 
-enum class A6MediaTypes(val value: String) {
+enum class A6MediaTypes(
+    val value: String,
+) {
     IMAGE("image"),
 }

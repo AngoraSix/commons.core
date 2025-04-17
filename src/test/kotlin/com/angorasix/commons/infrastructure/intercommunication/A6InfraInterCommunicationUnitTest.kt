@@ -15,7 +15,6 @@ import org.junit.jupiter.api.TestInstance
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class A6InfraInterCommunicationUnitTest {
-
     @Test
     @Throws(Exception::class)
     fun `Given A6InfraTopic - When getValue - Then corresponding value is retrieved`() =
