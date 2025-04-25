@@ -1,14 +1,22 @@
 package com.angorasix.commons.domain
 
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.fasterxml.jackson.annotation.JsonTypeName
 import org.springframework.data.annotation.PersistenceCreator
 import org.springframework.data.annotation.Transient
 
-/**
- * <p>
- * </p>
- *
- * @author rozagerardo
- */
+// Note: to access DetailedContributor data, use e.g. val email = (base as? DetailedContributor)?.email
+// 1) Annotate the base class with JsonTypeInfo/JsonSubTypes
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "kind",
+)
+@JsonSubTypes(
+    JsonSubTypes.Type(SimpleContributor::class, name = "simple"),
+    JsonSubTypes.Type(DetailedContributor::class, name = "detailed"),
+)
 open class SimpleContributor(
     open val contributorId: String,
     open val grants: Set<String> = emptySet(),
@@ -21,22 +29,16 @@ open class SimpleContributor(
     ) : this(contributorId, grants, null)
 }
 
-data class DetailedContributor(
-    @Transient override val contributorId: String,
-    @Transient override val grants: Set<String> = emptySet(),
-    @Transient override val isAdminHint: Boolean? = false,
-    val email: String?,
-    val firstName: String?,
-    val lastName: String?,
-    val profileMedia: A6Media?,
-) : SimpleContributor(contributorId, grants, isAdminHint) {
+// 2) (Optional) give the subtype an explicit JsonTypeName
+@JsonTypeName("detailed")
+class DetailedContributor
     @PersistenceCreator
     constructor(
         contributorId: String,
         grants: Set<String> = emptySet(),
-        email: String?,
-        firstName: String?,
-        lastName: String?,
-        profileMedia: A6Media?,
-    ) : this(contributorId, grants, null, email, firstName, lastName, profileMedia)
-}
+        isAdminHint: Boolean? = false,
+        val email: String? = null,
+        val firstName: String? = null,
+        val lastName: String? = null,
+        val profileMedia: A6Media? = null,
+    ) : SimpleContributor(contributorId, grants, isAdminHint)
