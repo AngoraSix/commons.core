@@ -58,5 +58,7 @@ enum class A6InfraTopics(
     // INTEGRATIONS
     CLUB_INVITATION("clubInvitation"),
 
+    // PROJECT MANAGEMENT
+    PROJECT_MANAGEMENT_CREATED("projectManagementCreated"),
     PROJECT_MANAGEMENT_CONTRIBUTOR_REGISTERED("projectManagementContributorRegistered"),
 }

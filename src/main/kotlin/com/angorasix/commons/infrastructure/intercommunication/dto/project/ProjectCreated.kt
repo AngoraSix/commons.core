@@ -8,10 +8,3 @@ data class ProjectCreated(
     val creatorContributor: SimpleContributor,
     val eventInstant: Instant = Instant.now(),
 )
-
-fun ProjectCreated.toMap(): Map<String, Any> =
-    buildMap {
-        put("projectId", projectId)
-        put("creatorContributor", creatorContributor)
-        put("eventInstant", eventInstant)
-    }
