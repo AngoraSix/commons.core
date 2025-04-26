@@ -24,14 +24,16 @@ suspend fun extractRequestingContributor(
     val authentication = request.awaitPrincipal() as JwtAuthenticationToken?
     val jwtPrincipal = authentication?.token
     jwtPrincipal?.let {
-        val firstName = it.getClaimAsString(StandardClaimNames.GIVEN_NAME)
-            ?: it.getClaimAsString(StandardClaimNames.NAME)
-            ?: it.getClaimAsString(StandardClaimNames.NICKNAME)
+        val firstName =
+            it.getClaimAsString(StandardClaimNames.GIVEN_NAME)
+                ?: it.getClaimAsString(StandardClaimNames.NAME)
+                ?: it.getClaimAsString(StandardClaimNames.NICKNAME)
         val requestingContributor =
             DetailedContributor(
                 it.getClaim(A6WellKnownClaims.CONTRIBUTOR_ID),
                 authentication.authorities.map { it.authority }.toSet(),
-                request.headers()
+                request
+                    .headers()
                     .firstHeader(AngoraSixInfrastructure.REQUEST_IS_ADMIN_HINT_HEADER) == "true",
                 it.getClaim(StandardClaimNames.EMAIL),
                 firstName,
@@ -56,8 +58,10 @@ suspend fun extractAffectedContributors(
     next: suspend (ServerRequest) -> ServerResponse,
     affectedContributorsIsRequired: Boolean = false,
 ): ServerResponse {
-    val contributorsString = request.headers()
-        .firstHeader(AngoraSixInfrastructure.EVENT_AFFECTED_CONTRIBUTOR_IDS_HEADER)
+    val contributorsString =
+        request
+            .headers()
+            .firstHeader(AngoraSixInfrastructure.EVENT_AFFECTED_CONTRIBUTOR_IDS_HEADER)
     return if (contributorsString.isNullOrBlank() && affectedContributorsIsRequired) {
         resolveBadRequest(
             "No affected contributors can be resolved from the request header",

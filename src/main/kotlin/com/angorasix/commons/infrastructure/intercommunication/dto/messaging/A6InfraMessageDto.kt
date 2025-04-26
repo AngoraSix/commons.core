@@ -1,6 +1,6 @@
 package com.angorasix.commons.infrastructure.intercommunication.dto.messaging
 
-import com.angorasix.commons.domain.DetailedContributor
+import com.angorasix.commons.domain.SimpleContributor
 import com.angorasix.commons.infrastructure.intercommunication.dto.A6DomainResource
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.DeserializationContext
@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
  *
  * @author rozagerardo
  */
-data class A6InfraMessageDto(
+data class A6InfraMessageDto<T>(
     val targetId: String,
     @JsonSerialize(using = A6DomainResourceSerializer::class)
     @JsonDeserialize(using = A6DomainResourceDeserializer::class)
@@ -24,8 +24,8 @@ data class A6InfraMessageDto(
     val objectId: String,
     val objectType: String,
     val topic: String,
-    val requestingContributor: DetailedContributor,
-    val messageData: Map<String, Any>,
+    val requestingContributor: SimpleContributor,
+    val messageData: T,
 )
 
 // Serializer

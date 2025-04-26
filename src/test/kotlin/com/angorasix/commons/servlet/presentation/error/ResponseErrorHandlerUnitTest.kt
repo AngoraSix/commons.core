@@ -14,14 +14,12 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.web.servlet.function.ServerResponse
-import java.util.*
 
 /**
  * @author rozagerardo
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ResponseErrorHandlerUnitTest {
-
     private lateinit var objectMapper: ObjectMapper
 
     @BeforeAll
@@ -86,18 +84,19 @@ public class ResponseErrorHandlerUnitTest {
 
     @Test
     @Throws(Exception::class)
-    fun `When resolveNotFound - Then response is 404 with standard fields`() = runTest {
-        val outputResponse = resolveNotFound()
+    fun `When resolveNotFound - Then response is 404 with standard fields`() =
+        runTest {
+            val outputResponse = resolveNotFound()
 
-        assertThat(outputResponse.statusCode())
-            .isEqualTo(HttpStatus.NOT_FOUND)
+            assertThat(outputResponse.statusCode())
+                .isEqualTo(HttpStatus.NOT_FOUND)
 
-        val problem = fetchBodyAsProblem(outputResponse)
+            val problem = fetchBodyAsProblem(outputResponse)
 
-        assertThat(problem.title).isEqualTo("ElementNotFound")
-        assertThat(problem.detail).isEqualTo("Element not found")
-        assertThat(problem.status).isEqualTo(HttpStatus.NOT_FOUND)
-    }
+            assertThat(problem.title).isEqualTo("ElementNotFound")
+            assertThat(problem.detail).isEqualTo("Element not found")
+            assertThat(problem.status).isEqualTo(HttpStatus.NOT_FOUND)
+        }
 
     @Test
     @Throws(Exception::class)
@@ -117,18 +116,19 @@ public class ResponseErrorHandlerUnitTest {
 
     @Test
     @Throws(Exception::class)
-    fun `When resolveBadRequest - Then response is 400 with standard fields`() = runTest {
-        val outputResponse = resolveBadRequest()
+    fun `When resolveBadRequest - Then response is 400 with standard fields`() =
+        runTest {
+            val outputResponse = resolveBadRequest()
 
-        assertThat(outputResponse.statusCode())
-            .isEqualTo(HttpStatus.BAD_REQUEST)
+            assertThat(outputResponse.statusCode())
+                .isEqualTo(HttpStatus.BAD_REQUEST)
 
-        val problem = fetchBodyAsProblem(outputResponse)
+            val problem = fetchBodyAsProblem(outputResponse)
 
-        assertThat(problem.title).isEqualTo("ElementInvalid")
-        assertThat(problem.detail).isEqualTo("Element is invalid")
-        assertThat(problem.status).isEqualTo(HttpStatus.BAD_REQUEST)
-    }
+            assertThat(problem.title).isEqualTo("ElementInvalid")
+            assertThat(problem.detail).isEqualTo("Element is invalid")
+            assertThat(problem.status).isEqualTo(HttpStatus.BAD_REQUEST)
+        }
 
     @Test
     @Throws(Exception::class)
@@ -148,18 +148,19 @@ public class ResponseErrorHandlerUnitTest {
 
     @Test
     @Throws(Exception::class)
-    fun `When resolveUnauthorized - Then response is 401 with standard fields`() = runTest {
-        val outputResponse = resolveUnauthorized()
+    fun `When resolveUnauthorized - Then response is 401 with standard fields`() =
+        runTest {
+            val outputResponse = resolveUnauthorized()
 
-        assertThat(outputResponse.statusCode())
-            .isEqualTo(HttpStatus.UNAUTHORIZED)
+            assertThat(outputResponse.statusCode())
+                .isEqualTo(HttpStatus.UNAUTHORIZED)
 
-        val problem = fetchBodyAsProblem(outputResponse)
+            val problem = fetchBodyAsProblem(outputResponse)
 
-        assertThat(problem.title).isEqualTo("UnauthorizedDueToElement")
-        assertThat(problem.detail).isEqualTo("Element is invalid")
-        assertThat(problem.status).isEqualTo(HttpStatus.UNAUTHORIZED)
-    }
+            assertThat(problem.title).isEqualTo("UnauthorizedDueToElement")
+            assertThat(problem.detail).isEqualTo("Element is invalid")
+            assertThat(problem.status).isEqualTo(HttpStatus.UNAUTHORIZED)
+        }
 
     @Test
     @Throws(Exception::class)
@@ -179,11 +180,11 @@ public class ResponseErrorHandlerUnitTest {
 
     private fun fetchBodyAsProblem(serverResponse: ServerResponse): Problem {
         val request = MockHttpServletRequest("GET", "http://thisdoenstmatter.com")
-        val context = object : ServerResponse.Context {
-            override fun messageConverters(): MutableList<HttpMessageConverter<*>> {
-                return mutableListOf(MappingJackson2HttpMessageConverter())
+        val context =
+            object : ServerResponse.Context {
+                override fun messageConverters(): MutableList<HttpMessageConverter<*>> =
+                    mutableListOf(MappingJackson2HttpMessageConverter())
             }
-        }
         val response = MockHttpServletResponse()
         serverResponse.writeTo(request, response, context)
         val responseBodyString = response.contentAsString

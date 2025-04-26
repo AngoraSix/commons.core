@@ -15,14 +15,13 @@ import org.springframework.mock.web.server.MockServerWebExchange
 import org.springframework.web.reactive.function.server.HandlerStrategies
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.result.view.ViewResolver
-import java.util.*
+import java.util.Collections
 
 /**
  * @author rozagerardo
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ResponseErrorHandlerUnitTest {
-
     private lateinit var objectMapper: ObjectMapper
 
     @BeforeAll
@@ -36,11 +35,9 @@ public class ResponseErrorHandlerUnitTest {
     @kotlinx.coroutines.ExperimentalCoroutinesApi
     fun `Given IllegalArgumentException - When resolveExceptionResponse - Then response is 400`() =
         runTest {
-            val outputResponse =
-                resolveExceptionResponse(IllegalArgumentException("Mocked Error Message"))
+            val outputResponse = resolveExceptionResponse(IllegalArgumentException("Mocked Error Message"))
 
-            assertThat(outputResponse.statusCode())
-                .isEqualTo(HttpStatus.BAD_REQUEST)
+            assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST)
 
             val problem = fetchBodyAsProblem(outputResponse)
 
@@ -61,8 +58,7 @@ public class ResponseErrorHandlerUnitTest {
                     "Mock",
                 )
 
-            assertThat(outputResponse.statusCode())
-                .isEqualTo(HttpStatus.BAD_REQUEST)
+            assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST)
 
             val problem = fetchBodyAsProblem(outputResponse)
 
@@ -77,11 +73,9 @@ public class ResponseErrorHandlerUnitTest {
     @kotlinx.coroutines.ExperimentalCoroutinesApi
     fun `Given Exception - When resolveExceptionResponse defining Element - Then response is 500 with customized fields`() =
         runTest {
-            val outputResponse =
-                resolveExceptionResponse(Exception("Mocked Error Message"), "Mock")
+            val outputResponse = resolveExceptionResponse(Exception("Mocked Error Message"), "Mock")
 
-            assertThat(outputResponse.statusCode())
-                .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
+            assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR)
 
             val problem = fetchBodyAsProblem(outputResponse)
 
@@ -94,19 +88,19 @@ public class ResponseErrorHandlerUnitTest {
     @Test
     @Throws(Exception::class)
     @kotlinx.coroutines.ExperimentalCoroutinesApi
-    fun `When resolveNotFound - Then response is 404 with standard fields`() = runTest {
-        val outputResponse = resolveNotFound()
+    fun `When resolveNotFound - Then response is 404 with standard fields`() =
+        runTest {
+            val outputResponse = resolveNotFound()
 
-        assertThat(outputResponse.statusCode())
-            .isEqualTo(HttpStatus.NOT_FOUND)
+            assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.NOT_FOUND)
 
-        val problem = fetchBodyAsProblem(outputResponse)
+            val problem = fetchBodyAsProblem(outputResponse)
 
-        assertThat(problem.title).isEqualTo("ElementNotFound")
+            assertThat(problem.title).isEqualTo("ElementNotFound")
 //        assertThat(problem.errorCode).isEqualTo("ELEMENT_NOT_FOUND")
-        assertThat(problem.detail).isEqualTo("Element not found")
-        assertThat(problem.status).isEqualTo(HttpStatus.NOT_FOUND)
-    }
+            assertThat(problem.detail).isEqualTo("Element not found")
+            assertThat(problem.status).isEqualTo(HttpStatus.NOT_FOUND)
+        }
 
     @Test
     @Throws(Exception::class)
@@ -115,8 +109,7 @@ public class ResponseErrorHandlerUnitTest {
         runTest {
             val outputResponse = resolveNotFound("Mocked Error Message", "Mock")
 
-            assertThat(outputResponse.statusCode())
-                .isEqualTo(HttpStatus.NOT_FOUND)
+            assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.NOT_FOUND)
 
             val problem = fetchBodyAsProblem(outputResponse)
 
@@ -129,19 +122,19 @@ public class ResponseErrorHandlerUnitTest {
     @Test
     @Throws(Exception::class)
     @kotlinx.coroutines.ExperimentalCoroutinesApi
-    fun `When resolveBadRequest - Then response is 400 with standard fields`() = runTest {
-        val outputResponse = resolveBadRequest()
+    fun `When resolveBadRequest - Then response is 400 with standard fields`() =
+        runTest {
+            val outputResponse = resolveBadRequest()
 
-        assertThat(outputResponse.statusCode())
-            .isEqualTo(HttpStatus.BAD_REQUEST)
+            assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST)
 
-        val problem = fetchBodyAsProblem(outputResponse)
+            val problem = fetchBodyAsProblem(outputResponse)
 
-        assertThat(problem.title).isEqualTo("ElementInvalid")
+            assertThat(problem.title).isEqualTo("ElementInvalid")
 //        assertThat(problem.errorCode).isEqualTo("ELEMENT_INVALID")
-        assertThat(problem.detail).isEqualTo("Element is invalid")
-        assertThat(problem.status).isEqualTo(HttpStatus.BAD_REQUEST)
-    }
+            assertThat(problem.detail).isEqualTo("Element is invalid")
+            assertThat(problem.status).isEqualTo(HttpStatus.BAD_REQUEST)
+        }
 
     @Test
     @Throws(Exception::class)
@@ -150,8 +143,7 @@ public class ResponseErrorHandlerUnitTest {
         runTest {
             val outputResponse = resolveBadRequest("Mocked Error Message", "Mock")
 
-            assertThat(outputResponse.statusCode())
-                .isEqualTo(HttpStatus.BAD_REQUEST)
+            assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.BAD_REQUEST)
 
             val problem = fetchBodyAsProblem(outputResponse)
 
@@ -164,19 +156,19 @@ public class ResponseErrorHandlerUnitTest {
     @Test
     @Throws(Exception::class)
     @kotlinx.coroutines.ExperimentalCoroutinesApi
-    fun `When resolveUnauthorized - Then response is 401 with standard fields`() = runTest {
-        val outputResponse = resolveUnauthorized()
+    fun `When resolveUnauthorized - Then response is 401 with standard fields`() =
+        runTest {
+            val outputResponse = resolveUnauthorized()
 
-        assertThat(outputResponse.statusCode())
-            .isEqualTo(HttpStatus.UNAUTHORIZED)
+            assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED)
 
-        val problem = fetchBodyAsProblem(outputResponse)
+            val problem = fetchBodyAsProblem(outputResponse)
 
-        assertThat(problem.title).isEqualTo("UnauthorizedDueToElement")
+            assertThat(problem.title).isEqualTo("UnauthorizedDueToElement")
 //        assertThat(problem.errorCode).isEqualTo("ELEMENT_UNAUTHORIZED")
-        assertThat(problem.detail).isEqualTo("Element is invalid")
-        assertThat(problem.status).isEqualTo(HttpStatus.UNAUTHORIZED)
-    }
+            assertThat(problem.detail).isEqualTo("Element is invalid")
+            assertThat(problem.status).isEqualTo(HttpStatus.UNAUTHORIZED)
+        }
 
     @Test
     @Throws(Exception::class)
@@ -185,8 +177,7 @@ public class ResponseErrorHandlerUnitTest {
         runTest {
             val outputResponse = resolveUnauthorized("Mocked Error Message", "Mock")
 
-            assertThat(outputResponse.statusCode())
-                .isEqualTo(HttpStatus.UNAUTHORIZED)
+            assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.UNAUTHORIZED)
 
             val problem = fetchBodyAsProblem(outputResponse)
 
@@ -197,23 +188,19 @@ public class ResponseErrorHandlerUnitTest {
         }
 
     private fun fetchBodyAsProblem(serverResponse: ServerResponse): Problem {
-        val defaultContext: ServerResponse.Context = object : ServerResponse.Context {
-            override fun messageWriters(): List<HttpMessageWriter<*>> {
-                return HandlerStrategies.withDefaults().messageWriters()
-            }
+        val defaultContext: ServerResponse.Context =
+            object : ServerResponse.Context {
+                override fun messageWriters(): List<HttpMessageWriter<*>> = HandlerStrategies.withDefaults().messageWriters()
 
-            override fun viewResolvers(): List<ViewResolver> {
-                return Collections.emptyList()
+                override fun viewResolvers(): List<ViewResolver> = Collections.emptyList()
             }
-        }
 
         val request = MockServerHttpRequest.get("http://thisdoenstmatter.com").build()
         val exchange = MockServerWebExchange.from(request)
         serverResponse.writeTo(exchange, defaultContext).block()
         val response = exchange.response
         val responseBodyString = response.bodyAsString.block()!!
-        val problem =
-            objectMapper.readValue(responseBodyString, Problem.ExtendedProblem::class.java)
+        val problem = objectMapper.readValue(responseBodyString, Problem.ExtendedProblem::class.java)
         var properties = problem.properties as Map<String, Any>?
         return problem.withStatus(HttpStatus.valueOf(properties?.get("status") as Int))
     }

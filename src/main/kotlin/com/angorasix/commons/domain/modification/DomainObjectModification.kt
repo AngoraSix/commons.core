@@ -8,6 +8,11 @@ import com.angorasix.commons.domain.SimpleContributor
  *
  * @author rozagerardo
  */
-abstract class DomainObjectModification<T, U>(val modifyValue: U) {
-    abstract fun modify(simpleContributor: SimpleContributor, domainObject: T): T
+abstract class DomainObjectModification<T, U>(
+    val modifyValue: U,
+) {
+    abstract fun modify(
+        simpleContributor: SimpleContributor,
+        domainObject: T,
+    ): T
 }

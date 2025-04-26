@@ -32,7 +32,9 @@ data class OptionSpec(
     val promptData: Map<String, Any>? = null, // if it's a complex select field, this will be used to show the data
 )
 
-enum class FieldSpec(val value: String) {
+enum class FieldSpec(
+    val value: String,
+) {
     TEXT("text"),
     SELECT("select"),
     DATE("date"),

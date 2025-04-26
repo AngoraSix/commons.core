@@ -14,17 +14,17 @@ import org.junit.jupiter.api.TestInstance
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CommonHandlerFunctionsUnitTest {
-
     @Test
     @Throws(Exception::class)
     fun `Given A6Media - When convertToDto - Then A6MEdiaDto is retrieved`() =
         runTest {
-            val modelMedia = A6Media(
-                "image",
-                "http://any.url.image.jpg",
-                "http://any.url.image-thumbnail.jpg",
-                "any-resourceId",
-            )
+            val modelMedia =
+                A6Media(
+                    "image",
+                    "http://any.url.image.jpg",
+                    "http://any.url.image-thumbnail.jpg",
+                    "any-resourceId",
+                )
 
             val dto = modelMedia.convertToDto()
 

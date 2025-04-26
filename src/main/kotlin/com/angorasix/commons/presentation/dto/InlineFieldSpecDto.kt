@@ -31,11 +31,8 @@ data class OptionSpecDto(
     val promptData: Map<String, Any>? = null, // if it's a complex select field, this will be used to show the data
 )
 
-fun InlineFieldSpec.convertToDto(): InlineFieldSpecDto =
-    InlineFieldSpecDto(name, type, options?.convertToDto())
+fun InlineFieldSpec.convertToDto(): InlineFieldSpecDto = InlineFieldSpecDto(name, type, options?.convertToDto())
 
-fun InlineFieldOptions.convertToDto(): InlineFieldOptionsDto =
-    InlineFieldOptionsDto(selectedValues, inline.map { it.convertToDto() })
+fun InlineFieldOptions.convertToDto(): InlineFieldOptionsDto = InlineFieldOptionsDto(selectedValues, inline.map { it.convertToDto() })
 
-fun OptionSpec.convertToDto(): OptionSpecDto =
-    OptionSpecDto(prompt, value, promptData)
+fun OptionSpec.convertToDto(): OptionSpecDto = OptionSpecDto(prompt, value, promptData)

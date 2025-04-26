@@ -19,17 +19,18 @@ import org.springframework.web.reactive.function.server.ServerResponse
 @OptIn(ExperimentalCoroutinesApi::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EventsExchangeUtilsUnitTest {
-
     @Test
     @Throws(Exception::class)
     fun `Given request with Triggers Event header - When affectedContributors invoked - Then response contains header`() =
         runTest {
             val response = ServerResponse.ok()
             val mockedRequest: ServerRequest =
-                MockServerRequest.builder().header(
-                    AngoraSixInfrastructure.TRIGGERS_EVENT_HEADER,
-                    "true",
-                ).build()
+                MockServerRequest
+                    .builder()
+                    .header(
+                        AngoraSixInfrastructure.TRIGGERS_EVENT_HEADER,
+                        "true",
+                    ).build()
 
             response.affectedContributors(
                 mockedRequest,
@@ -49,10 +50,12 @@ class EventsExchangeUtilsUnitTest {
         runTest {
             val response = ServerResponse.ok()
             val mockedRequest: ServerRequest =
-                MockServerRequest.builder().header(
-                    AngoraSixInfrastructure.TRIGGERS_EVENT_HEADER,
-                    "false",
-                ).build()
+                MockServerRequest
+                    .builder()
+                    .header(
+                        AngoraSixInfrastructure.TRIGGERS_EVENT_HEADER,
+                        "false",
+                    ).build()
 
             response.affectedContributors(
                 mockedRequest,
@@ -79,13 +82,16 @@ class EventsExchangeUtilsUnitTest {
 
     @Test
     @Throws(Exception::class)
-    fun `Given request with true Triggers Event header - When affectedContributors invoked without contributors - Then response contains empty header`() =
+    fun `Given Triggers Event header - When affectedContributors invoked without contributors - Then response contains empty header`() =
         runTest {
             val response = ServerResponse.ok()
-            val mockedRequest: ServerRequest = MockServerRequest.builder().header(
-                AngoraSixInfrastructure.TRIGGERS_EVENT_HEADER,
-                "true",
-            ).build()
+            val mockedRequest: ServerRequest =
+                MockServerRequest
+                    .builder()
+                    .header(
+                        AngoraSixInfrastructure.TRIGGERS_EVENT_HEADER,
+                        "true",
+                    ).build()
 
             response.affectedContributors(
                 mockedRequest,
