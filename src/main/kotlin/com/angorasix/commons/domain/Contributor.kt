@@ -31,14 +31,22 @@ open class SimpleContributor(
 
 // 2) (Optional) give the subtype an explicit JsonTypeName
 @JsonTypeName("detailed")
-class DetailedContributor
+class DetailedContributor(
+    contributorId: String,
+    grants: Set<String> = emptySet(),
+    isAdminHint: Boolean? = false,
+    val email: String? = null,
+    val firstName: String? = null,
+    val lastName: String? = null,
+    val profileMedia: A6Media? = null,
+) : SimpleContributor(contributorId, grants, isAdminHint) {
     @PersistenceCreator
     constructor(
         contributorId: String,
         grants: Set<String> = emptySet(),
-        isAdminHint: Boolean? = false,
-        val email: String? = null,
-        val firstName: String? = null,
-        val lastName: String? = null,
-        val profileMedia: A6Media? = null,
-    ) : SimpleContributor(contributorId, grants, isAdminHint)
+        email: String? = null,
+        firstName: String? = null,
+        lastName: String? = null,
+        profileMedia: A6Media? = null,
+    ) : this(contributorId, grants, null, email, firstName, lastName, profileMedia)
+}
