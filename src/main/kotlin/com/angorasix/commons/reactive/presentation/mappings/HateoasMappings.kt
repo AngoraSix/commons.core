@@ -33,7 +33,6 @@ fun RepresentationModel<*>.addSelfLink(
     add(affordanceLink)
 }
 
-@Suppress("SpreadOperator")
 fun RepresentationModel<*>.addLink(
     route: Route,
     actionName: String,
@@ -41,6 +40,19 @@ fun RepresentationModel<*>.addLink(
     expandArgs: List<String> = emptyList(),
     inputClazz: Class<*>? = null,
 ) {
+    val affordanceLink =
+        generateLink(route, actionName, request, expandArgs, inputClazz)
+    add(affordanceLink)
+}
+
+@Suppress("SpreadOperator")
+fun generateLink(
+    route: Route,
+    actionName: String,
+    request: ServerRequest,
+    expandArgs: List<String> = emptyList(),
+    inputClazz: Class<*>? = null,
+): Link {
     val actionLink =
         Link
             .of(
@@ -61,7 +73,7 @@ fun RepresentationModel<*>.addLink(
                 // If inputClazz is not null, invoke withInput and return the updated builder
                 inputClazz?.let { builder.withInput(it) } ?: builder
             }.toLink()
-    add(affordanceLink)
+    return affordanceLink
 }
 
 private fun uriBuilder(request: ServerRequest) =
