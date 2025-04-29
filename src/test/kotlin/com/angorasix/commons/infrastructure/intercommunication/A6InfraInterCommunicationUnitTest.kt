@@ -19,14 +19,14 @@ class A6InfraInterCommunicationUnitTest {
     @Throws(Exception::class)
     fun `Given A6InfraTopic - When getValue - Then corresponding value is retrieved`() =
         runTest {
-            val addMember = A6InfraTopics.ADD_MEMBER
-            val removeMember = A6InfraTopics.REMOVE_MEMBER
+            val projectMemberJoined = A6InfraTopics.PROJECT_CLUB_MEMBER_JOINED
+            val managementMemberJoined = A6InfraTopics.MANAGEMENT_CLUB_MEMBER_JOINED
 
-            val addMemberValue = addMember.value
-            val removeMemberValue = removeMember.value
+            val projectMemberJoinedValue = projectMemberJoined.value
+            val managementMemberJoinedValue = managementMemberJoined.value
 
-            assertThat(addMemberValue).isEqualTo("addMember")
-            assertThat(removeMemberValue).isEqualTo("removeMember")
+            assertThat(projectMemberJoinedValue).isEqualTo("addMember")
+            assertThat(managementMemberJoinedValue).isEqualTo("removeMember")
         }
 
     @Test

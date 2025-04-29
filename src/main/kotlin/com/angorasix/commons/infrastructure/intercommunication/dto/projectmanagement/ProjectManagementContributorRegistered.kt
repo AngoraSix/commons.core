@@ -1,6 +1,5 @@
 package com.angorasix.commons.infrastructure.intercommunication.dto.projectmanagement
 
-import com.angorasix.commons.presentation.dto.projectmanagement.BylawDto
 import java.time.Instant
 
 /**
@@ -9,6 +8,7 @@ import java.time.Instant
 data class ProjectManagementContributorRegistered(
     val projectManagementId: String,
     val registeredContributorId: String,
-    val relevantProjectManagementBylaws: List<BylawDto>,
-    val eventInstant: Instant,
+    val participatesInOwnership: Boolean,
+    val managementFinancialCurrencies: Set<String>,
+    val eventInstant: Instant = Instant.now(),
 )
