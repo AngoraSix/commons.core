@@ -45,8 +45,9 @@ sealed class A6DomainResource(
 enum class A6InfraTopics(
     val value: String,
 ) {
-    ADD_MEMBER("addMember"),
-    REMOVE_MEMBER("removeMember"),
+    // CLUB
+    PROJECT_CLUB_MEMBER_JOINED("projectClubMemberJoined"),
+    MANAGEMENT_CLUB_MEMBER_JOINED("managementClubMemberJoined"),
 
     // PROJECT
     PROJECT_CREATED("projectCreated"),
