@@ -25,8 +25,8 @@ class A6InfraInterCommunicationUnitTest {
             val projectMemberJoinedValue = projectMemberJoined.value
             val managementMemberJoinedValue = managementMemberJoined.value
 
-            assertThat(projectMemberJoinedValue).isEqualTo("addMember")
-            assertThat(managementMemberJoinedValue).isEqualTo("removeMember")
+            assertThat(projectMemberJoinedValue).isEqualTo("projectClubMemberJoined")
+            assertThat(managementMemberJoinedValue).isEqualTo("managementClubMemberJoined")
         }
 
     @Test
