@@ -1,4 +1,4 @@
-package com.angorasix.commons.infrastructure.intercommunication.dto.events
+package com.angorasix.commons.infrastructure.intercommunication.events
 
 /**
  * <p>
@@ -6,7 +6,7 @@ package com.angorasix.commons.infrastructure.intercommunication.dto.events
  *
  * @author rozagerardo
  */
-class A6InfraEventDto(
+class GatewayEventTriggered(
     val subjectType: String,
     val subjectId: String,
     val subjectEvent: String, // should match A6InfraTopics, not enforcing to avoid issues
