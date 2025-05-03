@@ -1,8 +1,7 @@
 package com.angorasix.commons.servlet.presentation.filter
 
+import com.angorasix.commons.domain.A6Contributor
 import com.angorasix.commons.domain.A6MediaTypes
-import com.angorasix.commons.domain.DetailedContributor
-import com.angorasix.commons.domain.SimpleContributor
 import com.angorasix.commons.infrastructure.constants.AngoraSixInfrastructure
 import com.angorasix.commons.infrastructure.oauth2.constants.A6WellKnownClaims
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -58,9 +57,8 @@ class RequestingContributorExtractionFilterUnitTest {
             assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.OK)
             assertThat(mockedRequest.attributes()).containsKey(AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY)
             val requestingContributor =
-                mockedRequest.attributes()[AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY] as DetailedContributor
+                mockedRequest.attributes()[AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY] as A6Contributor
             assertThat(requestingContributor.contributorId).isEqualTo("contributorIdValue")
-            assertThat(requestingContributor.grants).isEmpty()
             assertThat(requestingContributor.firstName).isEqualTo("firstName")
             assertThat(requestingContributor.lastName).isEqualTo("lastName")
             assertThat(requestingContributor.profileMedia?.mediaType).isEqualTo(A6MediaTypes.IMAGE.value)
@@ -96,16 +94,14 @@ class RequestingContributorExtractionFilterUnitTest {
             assertThat(outputResponse.statusCode()).isEqualTo(HttpStatus.OK)
             assertThat(mockedRequest.attributes()).containsKey(AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY)
             val requestingContributor =
-                mockedRequest.attributes()[AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY] as SimpleContributor
+                mockedRequest.attributes()[AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY] as A6Contributor
             assertThat(requestingContributor.contributorId).isEqualTo("contributorIdValue")
-            assertThat(requestingContributor.grants).isEmpty()
 
-            val requestingDetailedContributor =
-                mockedRequest.attributes()[AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY] as DetailedContributor
-            assertThat(requestingDetailedContributor.contributorId).isEqualTo("contributorIdValue")
-            assertThat(requestingDetailedContributor.grants).isEmpty()
-            assertThat(requestingDetailedContributor.firstName).isNull()
-            assertThat(requestingDetailedContributor.lastName).isNull()
-            assertThat(requestingDetailedContributor.profileMedia).isNull()
+            val requestingA6Contributor =
+                mockedRequest.attributes()[AngoraSixInfrastructure.REQUEST_ATTRIBUTE_CONTRIBUTOR_KEY] as A6Contributor
+            assertThat(requestingA6Contributor.contributorId).isEqualTo("contributorIdValue")
+            assertThat(requestingA6Contributor.firstName).isNull()
+            assertThat(requestingA6Contributor.lastName).isNull()
+            assertThat(requestingA6Contributor.profileMedia).isNull()
         }
 }

@@ -1,6 +1,6 @@
 package com.angorasix.commons.domain.modification
 
-import com.angorasix.commons.domain.SimpleContributor
+import com.angorasix.commons.domain.A6Contributor
 
 /**
  * <p>
@@ -12,7 +12,7 @@ abstract class DomainObjectModification<T, U>(
     val modifyValue: U,
 ) {
     abstract fun modify(
-        simpleContributor: SimpleContributor,
+        requestingContributor: A6Contributor,
         domainObject: T,
     ): T
 }

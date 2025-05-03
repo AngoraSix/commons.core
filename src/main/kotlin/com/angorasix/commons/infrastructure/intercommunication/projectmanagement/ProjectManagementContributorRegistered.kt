@@ -1,4 +1,4 @@
-package com.angorasix.commons.infrastructure.intercommunication.dto.projectmanagement
+package com.angorasix.commons.infrastructure.intercommunication.projectmanagement
 
 import java.time.Instant
 

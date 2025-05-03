@@ -1,6 +1,6 @@
 package com.angorasix.commons.presentation.dto
 
-import com.angorasix.commons.domain.SimpleContributor
+import com.angorasix.commons.domain.A6Contributor
 import com.angorasix.commons.domain.modification.DomainObjectModification
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
@@ -25,7 +25,7 @@ data class PatchOperation(
     val value: JsonNode?,
 ) {
     fun toDomainObjectModification(
-        contributor: SimpleContributor,
+        contributor: A6Contributor,
         supportedOperations: List<PatchOperationSpec>,
         objectMapper: ObjectMapper,
     ): DomainObjectModification<out Any, out Any> =
@@ -39,7 +39,7 @@ interface PatchOperationSpec {
     fun supportsPatchOperation(operation: PatchOperation): Boolean
 
     fun mapToObjectModification(
-        contributor: SimpleContributor,
+        contributor: A6Contributor,
         operation: PatchOperation,
         objectMapper: ObjectMapper,
     ): DomainObjectModification<out Any, out Any>
@@ -57,7 +57,7 @@ data class BulkPatchOperation(
     val value: JsonNode?,
 ) {
     fun toBulkModificationStrategy(
-        contributor: SimpleContributor,
+        contributor: A6Contributor,
         supportedOperations: List<BulkPatchOperationSpec>,
     ): String =
         supportedOperations
@@ -70,7 +70,7 @@ interface BulkPatchOperationSpec {
     fun supportsPatchOperation(operation: BulkPatchOperation): Boolean
 
     fun mapToStrategyId(
-        contributor: SimpleContributor,
+        contributor: A6Contributor,
         operation: BulkPatchOperation,
     ): String
 }

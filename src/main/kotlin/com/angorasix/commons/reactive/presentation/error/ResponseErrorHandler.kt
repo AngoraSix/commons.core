@@ -105,13 +105,13 @@ fun resolveProblem(
     links: Links? = null,
 ): EntityModel<out Problem> {
     val errorCode: String = resolveErrorCode(status, element)
-    val message: String = message ?: resolveErrorMessage(status, element)
+    val resolvedMessage: String = message ?: resolveErrorMessage(status, element)
     val problem =
         Problem
             .create()
             .withStatus(status)
             .withTitle(error)
-            .withDetail(message)
+            .withDetail(resolvedMessage)
             .withProperties { map ->
                 map["errorCode"] = errorCode
             }
@@ -128,7 +128,7 @@ private fun resolveErrorCode(
         HttpStatus.BAD_REQUEST -> "${element.replace(" ", "_").uppercase()}_INVALID"
         HttpStatus.NOT_FOUND -> "${element.replace(" ", "_").uppercase()}_NOT_FOUND"
         HttpStatus.UNAUTHORIZED -> "${element.replace(" ", "_").uppercase()}_UNAUTHORIZED"
-        else -> "${element.replace(" ", "_")?.uppercase()}_ERROR"
+        else -> "${element.replace(" ", "_").uppercase()}_ERROR"
     }
 
 private fun resolveErrorMessage(
