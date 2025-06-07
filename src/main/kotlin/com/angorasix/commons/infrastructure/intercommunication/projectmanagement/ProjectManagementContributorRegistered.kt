@@ -8,7 +8,7 @@ import java.time.Instant
 data class ProjectManagementContributorRegistered(
     val projectManagementId: String,
     val registeredContributorId: String,
-    val participatesInOwnership: Boolean,
+    val ownershipCurrency: String?,
     val managementFinancialCurrencies: Set<String>,
     val eventInstant: Instant = Instant.now(),
 )

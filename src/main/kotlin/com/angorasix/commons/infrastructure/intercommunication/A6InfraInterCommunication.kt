@@ -36,6 +36,7 @@ enum class A6InfraTopics(
     // CLUB
     PROJECT_CLUB_MEMBER_JOINED("projectClubMemberJoined"),
     MANAGEMENT_CLUB_MEMBER_JOINED("managementClubMemberJoined"),
+    CLUB_INVITATION("clubInvitation"),
 
     // PROJECT
     PROJECT_CREATED("projectCreated"),
@@ -44,10 +45,13 @@ enum class A6InfraTopics(
     TASKS_INTEGRATION_FULL_SYNCING("tasksIntegrationFullSyncing"),
     TASKS_INTEGRATION_SYNCING_CORRESPONDENCE("tasksIntegrationSyncingCorrespondence"),
 
-    // INTEGRATIONS
-    CLUB_INVITATION("clubInvitation"),
+    // TASKS
+    TASKS_CLOSED("tasksClosed"),
 
     // PROJECT MANAGEMENT
     PROJECT_MANAGEMENT_CREATED("projectManagementCreated"),
     PROJECT_MANAGEMENT_CONTRIBUTOR_REGISTERED("projectManagementContributorRegistered"),
+    PROJECT_MANAGEMENT_TASKS_CLOSED("projectManagementTasksClosed"),
 }
+
+const val A6_INFRA_BULK_ID = "a6-bulk-collection" // messages with this id should have a "collection" field
