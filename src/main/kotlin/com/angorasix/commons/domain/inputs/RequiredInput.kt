@@ -37,6 +37,7 @@ enum class FieldSpec(
 ) {
     TEXT("text"),
     SELECT("select"),
+    MULTIPLE("multiple"),
     DATE("date"),
     TIME("time"),
     DATETIME("datetime"),
