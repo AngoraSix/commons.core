@@ -13,6 +13,8 @@ data class InlineFieldSpec(
     val name: String, // key for the UI to show the label appropriately
     val type: FieldSpec,
     val options: InlineFieldOptions? = null,
+    val prompt: String = "",
+    val promptData: Map<String, Any>? = null, // if it's a complex select field, this will be used to show the data
 ) {
     constructor(name: String, type: FieldSpec, options: List<OptionSpec>) : this(
         name,
