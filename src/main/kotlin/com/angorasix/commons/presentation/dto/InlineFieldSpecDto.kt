@@ -18,6 +18,7 @@ data class InlineFieldSpecDto(
     val name: String, // key for the UI to show the label appropriately
     val type: FieldSpec,
     val options: InlineFieldOptionsDto?,
+    val promptData: Map<String, Any>? = null, // if it's a complex select field, this will be used to show the data
 )
 
 data class InlineFieldOptionsDto(
@@ -31,7 +32,7 @@ data class OptionSpecDto(
     val promptData: Map<String, Any>? = null, // if it's a complex select field, this will be used to show the data
 )
 
-fun InlineFieldSpec.convertToDto(): InlineFieldSpecDto = InlineFieldSpecDto(name, type, options?.convertToDto())
+fun InlineFieldSpec.convertToDto(): InlineFieldSpecDto = InlineFieldSpecDto(name, type, options?.convertToDto(), promptData)
 
 fun InlineFieldOptions.convertToDto(): InlineFieldOptionsDto = InlineFieldOptionsDto(selectedValues, inline.map { it.convertToDto() })
 
