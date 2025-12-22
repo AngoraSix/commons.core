@@ -17,6 +17,9 @@ enum class A6DomainResource(
     SOURCE_SYNC("sourceSync"),
     INTEGRATION_SOURCE_SYNC_EVENT("integrationSourceSyncEvent"),
 
+    PLATFORM_ADMIN("platformAdmin"),
+    SURVEY("survey"),
+
 //    @JsonCreator
 //    fun fromValue(value: String): A6DomainResource =
 //        when (value) {
@@ -52,6 +55,9 @@ enum class A6InfraTopics(
     PROJECT_MANAGEMENT_CREATED("projectManagementCreated"),
     PROJECT_MANAGEMENT_CONTRIBUTOR_REGISTERED("projectManagementContributorRegistered"),
     PROJECT_MANAGEMENT_TASKS_CLOSED("projectManagementTasksClosed"),
+
+    // SURVEYS
+    SURVEY_REGISTERED("surveyRegistered"),
 }
 
 const val A6_INFRA_BULK_ID = "a6-bulk-collection" // messages with this id should have a "collection" field
