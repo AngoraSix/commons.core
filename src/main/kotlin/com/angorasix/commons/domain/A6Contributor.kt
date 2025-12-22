@@ -19,4 +19,8 @@ data class A6Contributor(
         lastName: String?,
         profileMedia: A6Media?,
     ) : this(contributorId, email, firstName, lastName, profileMedia, null)
+
+    companion object {
+        fun anonymous(): A6Contributor = A6Contributor(contributorId = "unknown")
+    }
 }
